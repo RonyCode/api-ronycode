@@ -15,6 +15,8 @@ class ErrorController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        header('Content-type: text/html; charset=utf-8');
+
         require __DIR__ . '/../Helper/error404.html';
         http_response_code(404);
         return new Response(404, []);

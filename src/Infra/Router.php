@@ -29,9 +29,8 @@ class Router
         $this->url = $url;
         $this->service = $service;
 
-
         if (!array_key_exists($url, $service)) {
-            header('Location: /projeto/public/error');
+            header('Location: /api-ronycode/public/error');
         }
         return $service[$url];
     }

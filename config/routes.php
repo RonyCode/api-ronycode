@@ -6,8 +6,8 @@ use Api\Constrollers\AddStdController;
 use Api\Constrollers\DeleteStdController;
 use Api\Constrollers\ErrorController;
 use Api\Constrollers\GetAllStdController;
-use Api\Constrollers\Home;
 use Api\Constrollers\LoginController;
+use Api\Constrollers\SaveStdController;
 use Api\Constrollers\SelectStdController;
 use Api\Constrollers\UpdateStdController;
 use Api\Infra\Router;
@@ -17,6 +17,7 @@ $arrServices = [
     '/error' => ErrorController::class,
     '/aluno' => GetAllStdController::class,
     '/aluno/seleciona/' . $id => SelectStdController::class,
+    '/aluno/salva' => SaveStdController::class,
     '/aluno/adiciona' => AddStdController::class,
     '/aluno/deleta' => DeleteStdController::class,
     '/aluno/atualiza' => UpdateStdController::class

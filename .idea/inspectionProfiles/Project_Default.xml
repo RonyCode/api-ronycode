@@ -1,31 +1,12 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
-    <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="myCustomPropertiesEnabled" value="true" />
-      <option name="myIgnoreVendorSpecificProperties" value="false" />
-      <option name="myCustomPropertiesList">
-        <value>
-          <list size="1">
-            <item index="0" class="java.lang.String" itemvalue="enable-background" />
-          </list>
-        </value>
-      </option>
-    </inspection_tool>
     <inspection_tool class="PhpCSFixerValidationInspection" enabled="true" level="phpcs-fix" enabled_by_default="true">
-      <option name="CODING_STANDARD" />
+      <option name="CODING_STANDARD" value="PSR12" />
     </inspection_tool>
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="phpcs" enabled_by_default="true">
       <option name="CODING_STANDARD" value="PSR12" />
-      <option name="EXTENSIONS" value="php,css,inc" />
+      <option name="EXTENSIONS" value="php,js,css,inc" />
     </inspection_tool>
-    <inspection_tool class="PhpCompoundNamespaceDepthInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpLongTypeFormInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpMissingVisibilityInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpModifierOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpNewClassMissingParameterListInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpSeparateElseIfInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpTraitsUseListInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="PhpVarUsageInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
   </profile>
 </component>

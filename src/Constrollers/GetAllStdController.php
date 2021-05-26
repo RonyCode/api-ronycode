@@ -20,6 +20,6 @@ class GetAllStdController implements RequestHandlerInterface
             echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metódos HTTPs';
         }
         http_response_code(404);
-        return new Response(404, [], 'error');
+        return new Response(404, []);
     }
 }

@@ -17,7 +17,8 @@
     "php-http/message-factory": "1.0.x-dev",
     "psr/http-factory": "1.0.x-dev",
     "psr/http-message": "1.0.x-dev",
-    "psr/http-server-handler": "1.0.x-dev"
+    "psr/http-server-handler": "1.0.x-dev",
+    "ext-http": "*"
   },
   "autoload": {
     "psr-4": {

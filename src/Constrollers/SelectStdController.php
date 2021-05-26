@@ -25,7 +25,19 @@ class SelectStdController implements RequestHandlerInterface
                 throw new Exception();
             }
 
-            $student = new Student($url[0], '', '');
+            $student = new Student(
+                $url[0],
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            );
 
             $response = RepoStudents::selectStd($student);
             return new Response(200, [], json_encode($response, JSON_PRETTY_PRINT));
