@@ -15,6 +15,6 @@ class LoginController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         echo ' estou logado';
-        return new Response(200,[]);
+        return new Response(200, []);
     }
 }

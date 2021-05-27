@@ -9,7 +9,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 require __DIR__ . '/../vendor/autoload.php';
 
 /* REMOVE FOR PRODUCTION!!!*/
-DisplayErrorsOn::on();
 ini_set('html_errors', 1);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");

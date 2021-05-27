@@ -14,19 +14,19 @@ class DeleteStdController implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $id = filter_var($request->getParsedBody()['id']);
+        isset($id) ? $id = filter_var($request->getParsedBody()['id']) : $id = false;
 
         try {
-            if (is_null($id) || $id === '' || empty($id)) {
+            if (is_null($id) || $id === '' || empty($id) || $id === false) {
                 throw new Exception();
             }
 
-            $student = new Student($id, '', '');
+            $student = new Student($id, null, null, null, null, null, null, null, null, null, null);
 
             $deleteStd = RepoStudents::deleteStd($student);
             return new Response(200, [], json_encode($deleteStd, JSON_PRETTY_PRINT));
         } catch (Exception) {
-            echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metódos HTTPs';
+            echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metódos HTTPs <br/>';
         }
         http_response_code(404);
         return new Response(404, [], 'error');
