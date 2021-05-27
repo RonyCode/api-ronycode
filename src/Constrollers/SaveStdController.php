@@ -14,7 +14,7 @@ class SaveStdController implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        isset($_POST['id']) ? $id = filter_var($request->getParsedBody()['id'], FILTER_VALIDATE_INT) : $id = false;
+        $id = filter_var($request->getParsedBody()['id'], FILTER_VALIDATE_INT);
         $name = filter_var($request->getParsedBody()['name'], FILTER_SANITIZE_STRING);
         $phone = filter_var($request->getParsedBody()['phone'], FILTER_SANITIZE_STRING);
         $email = filter_var($request->getParsedBody()['email'], FILTER_SANITIZE_STRING);
@@ -27,7 +27,7 @@ class SaveStdController implements RequestHandlerInterface
         $result = filter_var($request->getParsedBody()['result'], FILTER_SANITIZE_STRING);
         try {
             $student = new Student(
-                $id | null,
+                $id,
                 $name,
                 $phone,
                 $email,
@@ -39,12 +39,8 @@ class SaveStdController implements RequestHandlerInterface
                 $expirationDate,
                 $result
             );
-            if ($id === false) {
-                $addUser = RepoStudents::addStd($student);
-                return new Response(200, [], json_encode($addUser));
-            }
-            $updateStd = RepoStudents::updateStd($student);
-            return new Response(200, [], json_encode($updateStd));
+            $addUser = RepoStudents::saveStd($student);
+            return new Response(200, [], json_encode($addUser));
         } catch (Exception) {
             echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os verbos HTTPs <br/>';
         }

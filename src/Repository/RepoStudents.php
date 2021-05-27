@@ -80,62 +80,16 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         }
     }
 
-    public static function addStd(Student $student): array
+    public static function saveStd(Student $student): array
     {
-        try {
-            $stmt = self::conn()->prepare(
-                'INSERT INTO students (
-                name, phone, email, 
-                address, birthday,report,
-                grade, registration_date, 
-                expiration_date, result) VALUES ( 
-                                :name, :phone, :email, 
-                                :address, :birthday,:report, 
-                                :grade, :registration_date,
-                                :expiration_date, :result)'
-            );
-            $stmt->bindValue(':name', $student->getName());
-            $stmt->bindValue(':phone', $student->getPhone());
-            $stmt->bindValue(':email', $student->getEmail());
-            $stmt->bindValue(':address', $student->getAddress());
-            $stmt->bindValue(':birthday', $student->getBirthday());
-            $stmt->bindValue(':report', $student->getReport());
-            $stmt->bindValue(':grade', $student->getGrade());
-            $stmt->bindValue(':registration_date', $student->getRegistrationDate());
-            $stmt->bindValue(':expiration_date', $student->getExpirationDate());
-            $stmt->bindValue(':result', $student->getResult());
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return ['data' => true, 'status' => 'success', 'code' => 200];
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception) {
-            echo "ERROR: Usuário já cadastrado ou não pode ser cadastrado, tente novamente <br/>";
-            http_response_code(404);
-            return ['data' => false, 'status' => 'error', 'code' => 404];
+        if ($student->getId()) {
+            return self::updateStd($student);
+        } else {
+            return self::addStd($student);
         }
     }
 
-    public static function deleteStd(
-        Student $student
-    ): array {
-        try {
-            $stmt = self::conn()->prepare('DELETE FROM students WHERE id = :id');
-            $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return ['data' => true, 'status' => 'success', 'code' => 200];
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception) {
-            echo 'ERROR: Usuário não encontrado, ou já deletado <br/>';
-            return ['data' => false, 'status' => 'error', 'code' => 404];
-        }
-    }
-
-    public static function updateStd(
+    private static function updateStd(
         Student $student
     ): array {
         try {
@@ -168,6 +122,62 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             }
         } catch (Exception) {
             echo 'ERROR: Usuário não encontrado, ou já atualizado <br/> ';
+            return ['data' => false, 'status' => 'error', 'code' => 404];
+        }
+    }
+
+    private static function addStd(Student $student): array
+    {
+        try {
+            $stmt = self::conn()->prepare(
+                'INSERT INTO students (
+                id,name, phone, email, 
+                address, birthday,report,
+                grade, registration_date, 
+                expiration_date, result) VALUES ( 
+                                :id,:name, :phone, :email, 
+                                :address, :birthday,:report, 
+                                :grade, :registration_date,
+                                :expiration_date, :result)'
+            );
+            $stmt->bindValue(':id', $student->getId());
+            $stmt->bindValue(':name', $student->getName());
+            $stmt->bindValue(':phone', $student->getPhone());
+            $stmt->bindValue(':email', $student->getEmail());
+            $stmt->bindValue(':address', $student->getAddress());
+            $stmt->bindValue(':birthday', $student->getBirthday());
+            $stmt->bindValue(':report', $student->getReport());
+            $stmt->bindValue(':grade', $student->getGrade());
+            $stmt->bindValue(':registration_date', $student->getRegistrationDate());
+            $stmt->bindValue(':expiration_date', $student->getExpirationDate());
+            $stmt->bindValue(':result', $student->getResult());
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return ['data' => true, 'status' => 'success', 'code' => 200];
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception) {
+            echo "ERROR: Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente <br/>";
+            http_response_code(404);
+            return ['data' => false, 'status' => 'error', 'code' => 404];
+        }
+    }
+
+    public static function deleteStd(
+        Student $student
+    ): array {
+        try {
+            $stmt = self::conn()->prepare('DELETE FROM students WHERE id = :id');
+            $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return ['data' => true, 'status' => 'success', 'code' => 200];
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception) {
+            echo 'ERROR: Usuário não encontrado, ou já deletado <br/>';
             return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }

@@ -28,8 +28,6 @@ $niv = new Student(
 );
 
 $tat = $niv->jsonSerialize();
-//var_dump($tat);
-//echo json_encode($tat);
 $tes = $niv->getAge();
 $tes1 = $niv->getName();
 $tes2 = $niv->getPhone();
@@ -42,4 +40,3 @@ $tes8 = $niv->getRegistrationDate();
 $tes9 = $niv->getExpirationDate();
 $tes10 = $niv->getResult();
 echo json_encode($tes3);
-

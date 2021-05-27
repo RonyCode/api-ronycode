@@ -14,8 +14,8 @@ class DeleteStdController implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        isset($id) ? $id = filter_var($request->getParsedBody()['id']) : $id = false;
-
+        isset($_POST['id']) ? $id = filter_var($request->getParsedBody()['id']) : $id = false;
+        var_dump($id);
         try {
             if (is_null($id) || $id === '' || empty($id) || $id === false) {
                 throw new Exception();

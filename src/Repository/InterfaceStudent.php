@@ -10,10 +10,9 @@ interface InterfaceStudent
 
     public static function selectStd(Student $student): array;
 
-    public static function addStd(Student $student): array;
-
     public static function deleteStd(Student $student): array;
 
-    public static function updateStd(Student $student): array;
+    public static function saveStd(Student $student): array;
+
 
 }
