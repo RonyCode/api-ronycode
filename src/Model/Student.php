@@ -24,22 +24,22 @@ class Student
     ) {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -47,8 +47,7 @@ class Student
     public function getBirthday(): ?string
     {
         $tes = new ValidateDate($this->birthday);
-        $data = $tes->toArrayValidateDb();
-        return $data;
+        return $tes->toArrayValidateDb();
     }
 
     public function getPhone(): ?string
@@ -81,8 +80,7 @@ class Student
                 $dateFormated = $date->format('d-m-Y');
                 $date = new DateTime($dateFormated);
                 $interval = $date->diff(new DateTime(date('Y/m/d')));
-                $calcAge = $interval->format('%Y');
-                return $calcAge;
+                return $interval->format('%Y');
             }
         } catch (Exception) {
             echo "Houve um erro nos dados, por favor verifique o formato das datas xx/xx/xxxx <br/>";
@@ -117,7 +115,7 @@ class Student
         return $this->result;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return get_object_vars($this);
     }

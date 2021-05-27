@@ -31,7 +31,6 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             echo "ERROR: Não foi possível listar todos os aluns </br>";
             http_response_code(404);
             exit();
-//            return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
 
@@ -62,9 +61,8 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         );
     }
 
-    public static function selectStd(
-        Student $student
-    ): array {
+    public static function selectStd(Student $student): array
+    {
         try {
             $stmt = self::conn()->prepare('SELECT * FROM students WHERE id = :id LIMIT 20');
             $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
@@ -129,10 +127,10 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             if ($stmt->rowCount() > 0) {
                 return ['data' => true, 'status' => 'success', 'code' => 200];
             } else {
-                throw new Exception('Usuário não encontrado, ou já deletado');
+                throw new Exception();
             }
-        } catch (Exception $e) {
-            echo 'ERROR: ' . $e->getMessage();
+        } catch (Exception) {
+            echo 'ERROR: Usuário não encontrado, ou já deletado <br/>';
             return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
@@ -166,10 +164,10 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             if ($stmt->rowCount() > 0) {
                 return ['data' => true, 'status' => 'success', 'code' => 200];
             } else {
-                throw new Exception('Usuário não encontrado, ou já atualizado');
+                throw new Exception();
             }
-        } catch (Exception $e) {
-            echo 'ERROR: ' . $e->getMessage();
+        } catch (Exception) {
+            echo 'ERROR: Usuário não encontrado, ou já atualizado <br/> ';
             return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
