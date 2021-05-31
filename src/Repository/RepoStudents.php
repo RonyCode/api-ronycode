@@ -2,6 +2,7 @@
 
 namespace Api\Repository;
 
+use Api\Helper\ValidateDate;
 use Api\Infra\GlobalConn;
 use Api\Model\Student;
 use Exception;
@@ -11,12 +12,11 @@ use PDOStatement;
 
 class RepoStudents extends GlobalConn implements InterfaceStudent
 {
-
     public function __construct()
     {
     }
 
-    public static function getAllStd(): array
+    public function getAllStd(): array
     {
         try {
             $stmt = self::conn()->prepare("SELECT * FROM students");
@@ -28,40 +28,46 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
-            echo "ERROR: Não foi possível listar todos os aluns </br>";
+            echo "ERROR: Não foi possível listar todos os alunos </br>";
             http_response_code(404);
             exit();
         }
     }
 
-    private static function hidrateStdList(PDOStatement $stmt): array
+    private function hidrateStdList(PDOStatement $stmt): array
     {
         $student = [];
         $stdData = $stmt->fetchAll();
         foreach ($stdData as $data) {
-            $student[] = self::newObjStudent($data)->jsonSerialize();
+            $student[] = self::newObjStudent($data)->dataSerialize();
         }
         return $student;
     }
 
-    #[Pure] private static function newObjStudent($data): Student
+    #[Pure] private function newObjStudent($data): Student
     {
+        $birthday = (new ValidateDate())
+            ->validateDateDb($data['birthday'], 'Y-m-d', 'd/m/Y');
+        $registrationDate = (new ValidateDate())
+            ->validateDateDb($data['registration_date'], 'Y-m-d', 'd/m/Y');
+        $expiration_date = (new ValidateDate())
+            ->validateDateDb($data['expiration_date'], 'Y-m-d', 'd/m/Y');
         return new Student(
             $data['id'],
             $data['name'],
             $data['phone'],
             $data['email'],
             $data['address'],
-            $data['birthday'],
+            $birthday,
             $data['report'],
             $data['grade'],
-            $data['registration_date'],
-            $data['expiration_date'],
+            $registrationDate,
+            $expiration_date,
             $data['result']
         );
     }
 
-    public static function selectStd(Student $student): array
+    public function selectStd(Student $student): array
     {
         try {
             $stmt = self::conn()->prepare('SELECT * FROM students WHERE id = :id LIMIT 20');
@@ -80,7 +86,7 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         }
     }
 
-    public static function saveStd(Student $student): array
+    public function saveStd(Student $student): array
     {
         if ($student->getId()) {
             return self::updateStd($student);
@@ -89,7 +95,7 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         }
     }
 
-    private static function updateStd(
+    private function updateStd(
         Student $student
     ): array {
         try {
@@ -126,21 +132,20 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         }
     }
 
-    private static function addStd(Student $student): array
+    private function addStd(Student $student): array
     {
         try {
             $stmt = self::conn()->prepare(
-                'INSERT INTO students (
-                id,name, phone, email, 
+                "INSERT INTO students (
+               name, phone, email, 
                 address, birthday,report,
                 grade, registration_date, 
-                expiration_date, result) VALUES ( 
-                                :id,:name, :phone, :email, 
+                expiration_date, result)  VALUES ( 
+                                :name, :phone, :email, 
                                 :address, :birthday,:report, 
                                 :grade, :registration_date,
-                                :expiration_date, :result)'
+                                :expiration_date, :result) "
             );
-            $stmt->bindValue(':id', $student->getId());
             $stmt->bindValue(':name', $student->getName());
             $stmt->bindValue(':phone', $student->getPhone());
             $stmt->bindValue(':email', $student->getEmail());
@@ -164,7 +169,7 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         }
     }
 
-    public static function deleteStd(
+    public function deleteStd(
         Student $student
     ): array {
         try {

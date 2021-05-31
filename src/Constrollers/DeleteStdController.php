@@ -23,7 +23,7 @@ class DeleteStdController implements RequestHandlerInterface
 
             $student = new Student($id, null, null, null, null, null, null, null, null, null, null);
 
-            $deleteStd = RepoStudents::deleteStd($student);
+            $deleteStd = (new RepoStudents())->deleteStd($student);
             return new Response(200, [], json_encode($deleteStd, JSON_PRETTY_PRINT));
         } catch (Exception) {
             echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metódos HTTPs <br/>';

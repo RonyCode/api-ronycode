@@ -9,24 +9,22 @@ class ValidateDate
 {
     private string $date;
 
-    public function __construct(private string|null $dateForDb)
+    public function __construct()
+    {
+    }
+
+    public function validateDateDb($objDate, $dateFormatMatch, $dateConverted): string
     {
         try {
-            $date = DateTimeImmutable::createFromFormat('d/m/Y', $this->dateForDb);
+            $date = DateTimeImmutable::createFromFormat($dateFormatMatch, $objDate);
             if (!$date) {
                 throw new Exception();
             } else {
-                $this->date = $date->format('Y-m-d');
-                return $date;
+                return $date->format($dateConverted);
             }
         } catch (Exception) {
             echo "Houve um erro nos dados, por favor verifique o formato da data dever ser exatamente XX/XX/XXXX <br/>";
             return "error";
         }
-    }
-
-    public function toArrayValidateDb(): ?string
-    {
-        return $this->date;
     }
 }

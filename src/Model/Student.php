@@ -4,23 +4,22 @@ namespace Api\Model;
 
 use Api\Helper\ValidateDate;
 use DateTime;
-use DateTimeImmutable;
 use Exception;
 
 class Student
 {
     public function __construct(
-        private int|null $id,
-        private string|null $name,
-        private string|null $phone,
-        private string|null $email,
-        private string|null $address,
-        private string|null $birthday,
-        private string|null $report,
-        private string|null $grade,
-        private string|null $registrationDate,
-        private string|null $expirationDate,
-        private string|null $result
+        private ?int $id,
+        private ?string $name,
+        private ?string $phone,
+        private ?string $email,
+        private ?string $address,
+        private ?string $birthday,
+        private ?string $report,
+        private ?string $grade,
+        private ?string $registrationDate,
+        private ?string $expirationDate,
+        private ?string $result
     ) {
     }
 
@@ -46,8 +45,7 @@ class Student
 
     public function getBirthday(): ?string
     {
-        $tes = new ValidateDate($this->birthday);
-        return $tes->toArrayValidateDb();
+        return (new ValidateDate())->validateDateDb($this->birthday, 'm/d/Y', 'Y-m-d');
     }
 
     public function getPhone(): ?string
@@ -66,24 +64,16 @@ class Student
 
     public function getAge(): ?string
     {
-        return self::calcAge($this->birthday);
-    }
-
-    private static function calcAge($birthday): string
-    {
         try {
-            $date =
-                DateTimeImmutable::createFromFormat('d/m/Y', $birthday);
-            if ($date === false) {
+            $date = (new ValidateDate())->validateDateDb($this->birthday, 'm/d/Y', 'Y-m-d');
+            if ($date === null) {
                 throw new Exception();
             } else {
-                $dateFormated = $date->format('d-m-Y');
-                $date = new DateTime($dateFormated);
-                $interval = $date->diff(new DateTime(date('Y/m/d')));
+                $dateFormated = new DateTime($date);
+                $interval = $dateFormated->diff(new DateTime(date('Y/m/d')));
                 return $interval->format('%Y');
             }
         } catch (Exception) {
-            echo "Houve um erro nos dados, por favor verifique o formato das datas xx/xx/xxxx <br/>";
             exit();
         }
     }
@@ -100,22 +90,19 @@ class Student
 
     public function getRegistrationDate(): ?string
     {
-        $registrationDate = new ValidateDate($this->registrationDate);
-        return $registrationDate->toArrayValidateDb();
+        return (new ValidateDate())->validateDateDb($this->registrationDate, 'm/d/Y', 'Y-m-d');
     }
 
     public function getExpirationDate(): ?string
     {
-        $expirationDate = new ValidateDate($this->expirationDate);
-        return $expirationDate->toArrayValidateDb();
+        return (new ValidateDate())->validateDateDb($this->expirationDate, 'm/d/Y', 'Y-m-d');
     }
 
     public function getResult(): ?string
     {
         return $this->result;
     }
-
-    public function jsonSerialize(): array
+    public function dataSerialize(): array
     {
         return get_object_vars($this);
     }
