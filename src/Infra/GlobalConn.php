@@ -4,8 +4,10 @@ namespace Api\Infra;
 
 use PDO;
 
+
 class GlobalConn
 {
+
     public static function conn(): PDO
     {
         $con = new PDO(DBDRIVE . ":host=" . DBHOST . ";dbname=" . DBNAME, DBUSER, DBPASSWORD);

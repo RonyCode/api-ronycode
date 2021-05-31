@@ -24,7 +24,6 @@ class SelectStdController implements RequestHandlerInterface
             if (is_null($url) || empty($url)) {
                 throw new Exception();
             }
-
             $student = new Student(
                 $url[0],
                 null,

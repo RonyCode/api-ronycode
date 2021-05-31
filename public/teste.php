@@ -2,6 +2,7 @@
 
 use Api\Model\Student;
 
+require __DIR__ . "/../vendor/autoload.php";
 require __DIR__ . "/../src/Model/Student.php";
 require __DIR__ . "/../src/Helper/ValidateDate.php";
 //closure ROTAS
@@ -27,16 +28,13 @@ $niv = new Student(
     null
 );
 
-$tat = $niv->jsonSerialize();
-$tes = $niv->getAge();
-$tes1 = $niv->getName();
-$tes2 = $niv->getPhone();
-$tes3 = $niv->getEmail();
-$tes4 = $niv->getAddress();
-$tes5 = $niv->getBirthday();
-$tes6 = $niv->getReport();
-$tes7 = $niv->getGrade();
-$tes8 = $niv->getRegistrationDate();
-$tes9 = $niv->getExpirationDate();
-$tes10 = $niv->getResult();
-echo json_encode($tes3);
+function setTableName($nameTable)
+{
+    return define(
+        'DBNAMES',
+        $nameTable
+    );
+}
+setTableName('asdasdad');
+var_dump(DBNAME);
+var_dump(DBNAMES);

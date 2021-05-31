@@ -15,14 +15,11 @@ class DeleteStdController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         isset($_POST['id']) ? $id = filter_var($request->getParsedBody()['id']) : $id = false;
-        var_dump($id);
         try {
             if (is_null($id) || $id === '' || empty($id) || $id === false) {
                 throw new Exception();
             }
-
             $student = new Student($id, null, null, null, null, null, null, null, null, null, null);
-
             $deleteStd = RepoStudents::deleteStd($student);
             return new Response(200, [], json_encode($deleteStd, JSON_PRETTY_PRINT));
         } catch (Exception) {

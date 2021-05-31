@@ -12,7 +12,7 @@ require __DIR__ . '/../vendor/autoload.php';
 ini_set('html_errors', 1);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
-//header('Content-type:application/json');
+header('Content-type:application/json');
 
 [$id, $url] = Router::normalizeUrl();
 

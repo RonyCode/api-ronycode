@@ -11,7 +11,6 @@ use PDOStatement;
 
 class RepoStudents extends GlobalConn implements InterfaceStudent
 {
-
     public function __construct()
     {
     }
@@ -94,13 +93,13 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
     ): array {
         try {
             $stmt = self::conn()->prepare(
-                'UPDATE students SET 
-                    name = :name , phone = :phone, 
-                    email = :email, address = :address, 
+                'UPDATE students SET
+                    name = :name , phone = :phone,
+                    email = :email, address = :address,
                     birthday = :birthday,
-                    report = :report, grade = :grade, 
+                    report = :report, grade = :grade,
                     registration_date = :registration_date,
-                    expiration_date = :expiration_date, 
+                    expiration_date = :expiration_date,
                     result = :result WHERE id = :id'
             );
             $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
@@ -131,12 +130,12 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         try {
             $stmt = self::conn()->prepare(
                 'INSERT INTO students (
-                id,name, phone, email, 
+                id,name, phone, email,
                 address, birthday,report,
-                grade, registration_date, 
-                expiration_date, result) VALUES ( 
-                                :id,:name, :phone, :email, 
-                                :address, :birthday,:report, 
+                grade, registration_date,
+                expiration_date, result) VALUES (
+                                :id,:name, :phone, :email,
+                                :address, :birthday,:report,
                                 :grade, :registration_date,
                                 :expiration_date, :result)'
             );
