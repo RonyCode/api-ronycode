@@ -38,7 +38,7 @@ class SelectStdController implements RequestHandlerInterface
                 null,
             );
 
-            $response = RepoStudents::selectStd($student);
+            $response = (new RepoStudents())->selectStd($student);
             return new Response(200, [], json_encode($response, JSON_PRETTY_PRINT));
         } catch (Exception) {
             echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metodos HTTPs';

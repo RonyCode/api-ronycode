@@ -1,10 +1,13 @@
 <?php
 
+use Api\Helper\JsonSerializer;
+use Api\Infra\GlobalConn;
 use Api\Model\Student;
+use Firebase\JWT\JWT;
 
-require __DIR__ . "/../vendor/autoload.php";
 require __DIR__ . "/../src/Model/Student.php";
 require __DIR__ . "/../src/Helper/ValidateDate.php";
+require __DIR__ . "/../vendor/autoload.php";
 //closure ROTAS
 
 //$rotas = function ($name) {
@@ -13,6 +16,8 @@ require __DIR__ . "/../src/Helper/ValidateDate.php";
 //$name = 'Rony';
 //
 //call_user_func($rotas, $name);
+
+$pdo = GlobalConn::conn();
 
 $niv = new Student(
     null,
@@ -28,13 +33,17 @@ $niv = new Student(
     null
 );
 
-function setTableName($nameTable)
-{
-    return define(
-        'DBNAMES',
-        $nameTable
+try {
+    $jwt = JWT::decode(
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.InJvbnlAdGVzdGUi.0enzB1l9IG_Ig2ZOUE6MGQv0x3scMxUV0jyD88d_dzo',
+        JWTKEY,
+        ['HS256']
     );
+    if (!$jwt) {
+        throw new Exception();
+    }
+    var_dump($jwt);
+
+} catch (Exception) {
+    echo 'Token inválido';
 }
-setTableName('asdasdad');
-var_dump(DBNAME);
-var_dump(DBNAMES);

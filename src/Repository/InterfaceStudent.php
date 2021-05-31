@@ -6,13 +6,13 @@ use Api\Model\Student;
 
 interface InterfaceStudent
 {
-    public static function getALlStd(): array;
+    public function getALlStd(): array;
 
-    public static function selectStd(Student $student): array;
+    public function selectStd(Student $student): array;
 
-    public static function deleteStd(Student $student): array;
+    public function deleteStd(Student $student): array;
 
-    public static function saveStd(Student $student): array;
+    public function saveStd(Student $student): array;
 
 
 }

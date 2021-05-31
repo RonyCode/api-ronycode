@@ -6,6 +6,7 @@ class Router
 {
     private $url;
     private $service;
+    private $auth;
 
     public function __construct()
     {
@@ -28,8 +29,10 @@ class Router
     {
         $this->url = $url;
         $this->service = $service;
+//        $this->auth = $auth;
 
         if (!array_key_exists($url, $service)) {
+            echo 'nao passou ';
             header('Location: /api-ronycode/public/error');
         }
         return $service[$url];
