@@ -27,15 +27,18 @@ class RepoUser extends GlobalConn
                 if (!$validHash) {
                     throw new Exception();
                 }
-                $jwt = JWT::encode($row['email'], JWTKEY);
-                return ['data' => $jwt, 'status' => 'success', 'code' => 200];
+                return JWT::encode($row['email'], JWTKEY);
             } else {
                 throw new Exception();
             }
         } catch (Exception) {
-            echo "Não autenticado, veridique o login novamente. </br>";
             http_response_code(404);
-            return ['data' => false, 'status' => 'error', 'code' => 404];
+            return [
+                'data' => false,
+                'status' => 'error',
+                'code' => 404,
+                "message" => "Não autenticado, verifique o login novamente"
+            ];
         }
     }
 

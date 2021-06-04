@@ -2,6 +2,7 @@
 
 namespace Api\Constrollers;
 
+use Api\Helper\GetParsedBodyJson;
 use Api\Model\Student;
 use Api\Repository\RepoStudents;
 use Exception;
@@ -14,17 +15,18 @@ class SaveStdController implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        isset($_POST['id']) ? $id = filter_var($request->getParsedBody()['id'], FILTER_VALIDATE_INT) : $id = null;
-        $name = filter_var($request->getParsedBody()['name'], FILTER_SANITIZE_STRING);
-        $phone = filter_var($request->getParsedBody()['phone'], FILTER_SANITIZE_STRING);
-        $email = filter_var($request->getParsedBody()['email'], FILTER_SANITIZE_STRING);
-        $address = filter_var($request->getParsedBody()['address'], FILTER_SANITIZE_STRING);
-        $birthday = filter_var($request->getParsedBody()['birthday'], FILTER_SANITIZE_STRING);
-        $report = filter_var($request->getParsedBody()['report'], FILTER_SANITIZE_STRING);
-        $grade = filter_var($request->getParsedBody()['grade'], FILTER_SANITIZE_STRING);
-        $registrationDate = filter_var($request->getParsedBody()['registration_date'], FILTER_SANITIZE_STRING);
-        $expirationDate = filter_var($request->getParsedBody()['expiration_date'], FILTER_SANITIZE_STRING);
-        $result = filter_var($request->getParsedBody()['result'], FILTER_SANITIZE_STRING);
+        $_POST = (new GetParsedBodyJson())->getParsedPost($request);
+        isset($_POST['id']) ? $id = filter_var($_POST['id'], FILTER_VALIDATE_INT) : $id = null;
+        $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+        $phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+        $address = filter_var($_POST['address'], FILTER_SANITIZE_STRING);
+        $birthday = filter_var($_POST['birthday'], FILTER_SANITIZE_STRING);
+        $report = filter_var($_POST['report'], FILTER_SANITIZE_STRING);
+        $grade = filter_var($_POST['grade'], FILTER_SANITIZE_STRING);
+        $registrationDate = filter_var($_POST['registration_date'], FILTER_SANITIZE_STRING);
+        $expirationDate = filter_var($_POST['expiration_date'], FILTER_SANITIZE_STRING);
+        $result = filter_var($_POST['result'], FILTER_SANITIZE_STRING);
         try {
             $student = new Student(
                 $id | null,
@@ -42,9 +44,14 @@ class SaveStdController implements RequestHandlerInterface
             $addUser = (new RepoStudents())->saveStd($student);
             return new Response(200, [], json_encode($addUser));
         } catch (Exception) {
-            echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os verbos HTTPs <br/>';
+            http_response_code(404);
+            $response = [
+                'data' => false,
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Não autenticado ou error nos verbos HTTPs'
+            ];
+            return new Response(404, [], $response);
         }
-        http_response_code(404);
-        return new Response(404, [], "Error");
     }
 }

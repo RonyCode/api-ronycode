@@ -23,8 +23,8 @@ class ValidateDate
                 return $date->format($dateConverted);
             }
         } catch (Exception) {
-            echo "Houve um erro nos dados, por favor verifique o formato da data dever ser exatamente XX/XX/XXXX <br/>";
-            return "error";
+            return "Houve um erro nos dados, por favor verifique o formato da data
+                dever ser exatamente XX/XX/XXXX <br/>";
         }
     }
 }

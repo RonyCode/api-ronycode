@@ -6,23 +6,35 @@ use Api\Constrollers\AuthController;
 use Api\Constrollers\DeleteStdController;
 use Api\Constrollers\ErrorController;
 use Api\Constrollers\GetAllStdController;
+use Api\Constrollers\HomeController;
 use Api\Constrollers\RecoverPassController;
-use Api\Constrollers\RegisterUserController;
+use Api\Constrollers\RegisterLoginController;
 use Api\Constrollers\SaveStdController;
 use Api\Constrollers\SelectStdController;
+use Api\Helper\CheckAuth;
 use Api\Infra\Router;
 
-if (true === true) {
-    $arrService =
+$arrService =
+    [
+        '/' => HomeController::class,
+        '/login' => AuthController::class,
+        '/login/cadastrar' => RegisterLoginController::class,
+        '/login/recuperar' => RecoverPassController::class,
+        '/error' => ErrorController::class,
+
+    ];
+
+//if (CheckAuth::validToken()) {
+    $arrServiceProtected =
         [
-            '/login' => AuthController::class,
-            '/login/cadastrar' => RegisterUserController::class,
-            '/login/recuperar' => RecoverPassController::class,
-            '/error' => ErrorController::class,
             '/aluno' => GetAllStdController::class,
             '/aluno/id/' . $id => SelectStdController::class,
             '/aluno/salvar' => SaveStdController::class,
             '/aluno/deletar' => DeleteStdController::class,
         ];
-}
-return (new Router())->addRoute($url, $arrService);
+//}
+$route = (new Router())->addRoute($url, $arrService);
+$routeProtected = (new Router())->addRouteProtected($url, $arrServiceProtected);
+$arrRoute = [$routeProtected, $route];
+$routeNoNull = array_values(array_filter($arrRoute));
+return $routeNoNull[0];

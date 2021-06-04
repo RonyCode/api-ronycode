@@ -1,4 +1,4 @@
 <?php
 
-
-echo password_hash('123', PASSWORD_ARGON2I);
+$params = (array)json_decode(file_get_contents('php://input'), true);
+var_dump($params);
