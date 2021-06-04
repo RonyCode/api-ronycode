@@ -21,6 +21,14 @@
       <path value="$PROJECT_DIR$/vendor/nyholm/psr7-server" />
       <path value="$PROJECT_DIR$/vendor/psr/http-server-handler" />
       <path value="$PROJECT_DIR$/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/nyholm/psr7-server" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/php-http/message-factory" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/psr/http-server-handler" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/nyholm/psr7" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/../api-ronycode/vendor/composer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

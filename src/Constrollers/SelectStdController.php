@@ -20,7 +20,6 @@ class SelectStdController implements RequestHandlerInterface
     public function handle($request): ResponseInterface
     {
         $url = Router::normalizeUrl();
-
         try {
             if (is_null($url) || empty($url)) {
                 throw new Exception();
@@ -42,14 +41,9 @@ class SelectStdController implements RequestHandlerInterface
             $response = (new RepoStudents())->selectStd($student);
             return new Response(200, [], json_encode($response, JSON_PRETTY_PRINT));
         } catch (Exception) {
-            http_response_code(404);
-            $response = [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ];
-            return new Response(404, [], json_encode($response));
+            echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metodos HTTPs';
         }
+        http_response_code(404);
+        return new Response(404, [], 'error');
     }
 }

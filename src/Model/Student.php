@@ -104,6 +104,7 @@ class Student
     {
         return $this->result;
     }
+
     public function dataSerialize(): array
     {
         return get_object_vars($this);

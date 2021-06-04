@@ -25,13 +25,13 @@ $arrService =
     ];
 
 //if (CheckAuth::validToken()) {
-    $arrServiceProtected =
-        [
-            '/aluno' => GetAllStdController::class,
-            '/aluno/id/' . $id => SelectStdController::class,
-            '/aluno/salvar' => SaveStdController::class,
-            '/aluno/deletar' => DeleteStdController::class,
-        ];
+$arrServiceProtected =
+    [
+        '/aluno' => GetAllStdController::class,
+        '/aluno/id/' . $id => SelectStdController::class,
+        '/aluno/salvar' => SaveStdController::class,
+        '/aluno/deletar' => DeleteStdController::class,
+    ];
 //}
 $route = (new Router())->addRoute($url, $arrService);
 $routeProtected = (new Router())->addRouteProtected($url, $arrServiceProtected);

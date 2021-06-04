@@ -28,13 +28,9 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
+            echo "ERROR: Não foi possível listar todos os alunos </br>";
             http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Não foi possível listar todos os alunos'
-            ];
+            exit();
         }
     }
 
@@ -84,13 +80,9 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
+            echo "ERROR: Usuário não encontrado, ou não cadastrado </br>";
             http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Usuário não encontrado, ou não cadastrado'
-            ];
+            return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
 
@@ -135,13 +127,8 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Usuário não encontrado, ou já atualizado'
-            ];
+            echo 'ERROR: Usuário não encontrado, ou já atualizado <br/> ';
+            return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
 
@@ -176,13 +163,9 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
+            echo "ERROR: Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente <br/>";
             http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente'
-            ];
+            return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
 
@@ -199,13 +182,8 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Usuário não encontrado, ou já deletado'
-            ];
+            echo 'ERROR: Usuário não encontrado, ou já deletado <br/>';
+            return ['data' => false, 'status' => 'error', 'code' => 404];
         }
     }
 }
