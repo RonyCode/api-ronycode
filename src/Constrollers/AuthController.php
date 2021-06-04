@@ -2,6 +2,7 @@
 
 namespace Api\Constrollers;
 
+use Api\Helper\GetParsedBodyJson;
 use Api\Model\User;
 use Api\Repository\RepoUser;
 use Exception;
@@ -12,31 +13,28 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuthController implements RequestHandlerInterface
 {
-
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $_POST = (new GetParsedBodyJson())->getParsedPost($request);
 
-
-        var_dump($_POST);
         try {
-            isset($_POST['email']) ? $email = filter_var(
-                $request->getParsedBody()['email'],
-                FILTER_SANITIZE_EMAIL
-            ) : $email = null;
-            isset($_POST['pass']) ? $pass = filter_var(
-                $request->getParsedBody()['pass'],
-                FILTER_SANITIZE_STRING
-            ) : $pass = null;
-            if ($email === false || $pass == false || $email === null || $pass === null) {
+            isset($_POST['email']) ? $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING) : $email = null;
+            isset($_POST['pass']) ? $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING) : $pass = null;
+            if ($_POST['email'] === null || $_POST['pass'] === null) {
                 throw new Exception();
             }
             $user = new User(null, $email, $pass);
             $response = RepoUser::userAuth($user);
-            return new Response(200, [], $response['data']);
+            return new Response(200, [], json_encode($response));
         } catch (Exception) {
-            echo 'Login não autorizado verifique seu login e senha e tente novamente';
+            http_response_code(404);
+            $response = [
+                'data' => false,
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Não autenticado ou error nos verbos HTTPs'
+            ];
+            return new Response(404, [], json_encode($response));
         }
-//        http_response_code(404);
-        return new Response(200, []);
     }
 }

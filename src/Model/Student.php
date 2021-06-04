@@ -51,7 +51,7 @@ class Student
     public function getPhone(): ?string
     {
         try {
-            $regex = "/^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}-[0-9]{4}$/";
+            $regex = "/^\(?[1-9]{2}\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$/";
             if (!preg_match($regex, $this->phone, $match)) {
                 throw new Exception();
             }
@@ -74,6 +74,8 @@ class Student
                 return $interval->format('%Y');
             }
         } catch (Exception) {
+            echo "Erro, não foi possível pegar a idade atual <br/> \n ";
+
             exit();
         }
     }

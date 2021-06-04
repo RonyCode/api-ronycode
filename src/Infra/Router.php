@@ -4,9 +4,9 @@ namespace Api\Infra;
 
 class Router
 {
-    private $url;
-    private $service;
-    private $auth;
+    private $path;
+    private $controllers;
+    private $controllersProtected;
 
     public function __construct()
     {
@@ -25,16 +25,26 @@ class Router
         return [$id, $url];
     }
 
-    public function addRoute($url, array $service)
+    public function addRoute($path, array $controllers)
     {
-        $this->url = $url;
-        $this->service = $service;
-//        $this->auth = $auth;
+        $this->path = $path;
+        $this->controllers = $controllers;
 
-        if (!array_key_exists($url, $service)) {
-            echo 'nao passou ';
+        if (!array_key_exists($path, $controllers) && !isset($path) && !isset($controllers)) {
+            header('Location: /api-ronycode/public/error');
+            exit();
+        }
+        return $controllers[$path];
+    }
+
+    public function addRouteProtected($path, array $controllersProtected)
+    {
+        $this->path = $path;
+        $this->controllersProtected = $controllersProtected;
+
+        if (!array_key_exists($path, $controllersProtected) && !isset($path) && !isset($controllersProtected)) {
             header('Location: /api-ronycode/public/error');
         }
-        return $service[$url];
+        return $controllersProtected[$path];
     }
 }

@@ -3,7 +3,6 @@
 use Api\Helper\JsonSerializer;
 use Api\Infra\GlobalConn;
 use Api\Model\Student;
-use Firebase\JWT\JWT;
 
 require __DIR__ . "/../src/Model/Student.php";
 require __DIR__ . "/../src/Helper/ValidateDate.php";
@@ -32,18 +31,18 @@ $niv = new Student(
     "12/12/2021",
     null
 );
+$data = file_get_contents("php://input", false, stream_context_get_default(), 0, $_SERVER["CONTENT_LENGTH"]);
+$data1 = json_decode($data);
+var_dump($data1);
 
-try {
-    $jwt = JWT::decode(
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.InJvbnlAdGVzdGUi.0enzB1l9IG_Ig2ZOUE6MGQv0x3scMxUV0jyD88d_dzo',
-        JWTKEY,
-        ['HS256']
-    );
-    if (!$jwt) {
-        throw new Exception();
-    }
-    var_dump($jwt);
 
-} catch (Exception) {
-    echo 'Token inválido';
-}
+//$test2 = explode(':', $data);
+//$test3 = explode(',', $test2[1]);
+//$email = str_replace("\"",'', $test3[0]);
+//$pass = str_replace("\"",'', $test3[1]);
+//var_dump($email);
+//var_dump($pass  );
+
+$params = (array)json_decode(file_get_contents('php://input'), true);
+var_dump($params);
+

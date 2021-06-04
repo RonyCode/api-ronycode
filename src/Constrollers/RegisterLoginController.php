@@ -1,20 +1,19 @@
 <?php
 
-
 namespace Api\Constrollers;
 
-
-use http\Client\Response;
+use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class UserController implements RequestHandlerInterface
+class RegisterLoginController implements RequestHandlerInterface
 {
+
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        echo 'estou na user';
+        echo 'entreei no cadastro';
         return new Response(200, []);
     }
 }

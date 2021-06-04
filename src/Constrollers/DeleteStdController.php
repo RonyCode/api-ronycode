@@ -15,7 +15,6 @@ class DeleteStdController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         isset($_POST['id']) ? $id = filter_var($request->getParsedBody()['id']) : $id = false;
-        var_dump($id);
         try {
             if (is_null($id) || $id === '' || empty($id) || $id === false) {
                 throw new Exception();
@@ -26,9 +25,14 @@ class DeleteStdController implements RequestHandlerInterface
             $deleteStd = (new RepoStudents())->deleteStd($student);
             return new Response(200, [], json_encode($deleteStd, JSON_PRETTY_PRINT));
         } catch (Exception) {
-            echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metódos HTTPs <br/>';
+            http_response_code(404);
+            $response = [
+                'data' => false,
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Não autenticado ou error nos verbos HTTPs'
+            ];
+            return new Response(404, [], json_encode($response));
         }
-        http_response_code(404);
-        return new Response(404, [], 'error');
     }
 }

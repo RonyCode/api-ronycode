@@ -19,6 +19,13 @@ class ErrorController implements RequestHandlerInterface
 
         require __DIR__ . '/../Helper/error404.html';
         http_response_code(404);
-        return new Response(404, []);
+        http_response_code(404);
+        $response = [
+            'data' => false,
+            'status' => 'error',
+            'code' => 404,
+            'message' => 'Página não encontrada!!! Verifique usa URL'
+        ];
+        return new Response(404, [], $response);
     }
 }
