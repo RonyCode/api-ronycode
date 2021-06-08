@@ -30,21 +30,9 @@ class Router
         $this->path = $path;
         $this->controllers = $controllers;
 
-        if (!array_key_exists($path, $controllers) && !isset($path) && !isset($controllers)) {
+        if (!array_key_exists($path, $controllers) && !array_values($controllers)) {
             header('Location: /api-ronycode/public/error');
-            exit();
         }
         return $controllers[$path];
-    }
-
-    public function addRouteProtected($path, array $controllersProtected)
-    {
-        $this->path = $path;
-        $this->controllersProtected = $controllersProtected;
-
-        if (!array_key_exists($path, $controllersProtected) && !isset($path) && !isset($controllersProtected)) {
-            header('Location: /api-ronycode/public/error');
-        }
-        return $controllersProtected[$path];
     }
 }

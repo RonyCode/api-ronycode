@@ -34,7 +34,7 @@ $arrServiceProtected =
     ];
 //}
 $route = (new Router())->addRoute($url, $arrService);
-$routeProtected = (new Router())->addRouteProtected($url, $arrServiceProtected);
+$routeProtected = (new Router())->addRoute($url, $arrServiceProtected);
 $arrRoute = [$routeProtected, $route];
 $routeNoNull = array_values(array_filter($arrRoute));
 return $routeNoNull[0];

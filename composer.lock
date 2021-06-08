@@ -57,7 +57,7 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/master"
+                "source": "https://github.com/firebase/php-jwt/tree/v5.3.0"
             },
             "time": "2021-05-20T17:37:02+00:00"
         },

@@ -42,26 +42,7 @@ class RepoUser extends GlobalConn
         }
     }
 
-    private static function hidrateUserList(PDOStatement $stmt): array
-    {
-        $user = [];
-        $userData = $stmt->fetchAll();
-        foreach ($userData as $data) {
-            $user[] = self::newObjUser($data)->dataSerialize();
-        }
-        return $user;
-    }
-
-    #[Pure] private static function newObjUser($data): User
-    {
-        return new User(
-            $data['id'],
-            $data['email'],
-            $data['pass'],
-        );
-    }
-
-    private function addUser(User $user): array
+    public static function addUser(User $user): array
     {
         try {
             $stmt = self::conn()->prepare(
@@ -80,6 +61,25 @@ class RepoUser extends GlobalConn
             http_response_code(404);
             return ['data' => false, 'status' => 'error', 'code' => 404];
         }
+    }
+
+    private static function hidrateUserList(PDOStatement $stmt): array
+    {
+        $user = [];
+        $userData = $stmt->fetchAll();
+        foreach ($userData as $data) {
+            $user[] = self::newObjUser($data)->dataSerialize();
+        }
+        return $user;
+    }
+
+    #[Pure] private static function newObjUser($data): User
+    {
+        return new User(
+            $data['id'],
+            $data['email'],
+            $data['pass'],
+        );
     }
 
 
