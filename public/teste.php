@@ -31,18 +31,22 @@ $niv = new Student(
     "12/12/2021",
     null
 );
-$data = file_get_contents("php://input", false, stream_context_get_default(), 0, $_SERVER["CONTENT_LENGTH"]);
-$data1 = json_decode($data);
-var_dump($data1);
+
+date_default_timezone_set('America/Araguaina');
 
 
-//$test2 = explode(':', $data);
-//$test3 = explode(',', $test2[1]);
-//$email = str_replace("\"",'', $test3[0]);
-//$pass = str_replace("\"",'', $test3[1]);
-//var_dump($email);
-//var_dump($pass  );
-
-$params = (array)json_decode(file_get_contents('php://input'), true);
-var_dump($params);
-
+$stmt = $pdo->prepare(
+    "UPDATE user SET
+                        hash = :hash, 
+                expiration_hash = :expiration_hash 
+                WHERE email = :email"
+);
+var_dump(date('Y-m-d H:i:s'));
+$stmt->bindValue(":email", 'rony@teste');
+$stmt->bindValue(":hash", password_hash('rony@teste', PASSWORD_ARGON2I));
+$stmt->bindValue(":expiration_hash", date('Y-m-d H:i:s'));
+$stmt->execute();
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch();
+    echo " mudou as infos";
+}

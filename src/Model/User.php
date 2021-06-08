@@ -6,7 +6,7 @@ class User
 {
     public function __construct(
         private ?int $id,
-        private string $email,
+        private ?string $email,
         private ?string $pass,
     ) {
     }
@@ -25,7 +25,6 @@ class User
     {
         return $this->pass;
     }
-
 
     public function dataSerialize(): array
     {
