@@ -172,7 +172,7 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             $stmt->bindValue(':result', $student->getResult());
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
-                return ['data' => true, 'status' => 'success', 'code' => 200];
+                return ['data' => true, 'status' => 'success', 'code' => 200, "message" => "Cadastrado com sucesso!"];
             } else {
                 throw new Exception();
             }

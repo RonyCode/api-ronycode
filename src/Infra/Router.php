@@ -2,11 +2,13 @@
 
 namespace Api\Infra;
 
+use Api\Helper\CheckAuth;
+use Exception;
+
 class Router
 {
-    private $path;
-    private $controllers;
-    private $controllersProtected;
+    private string $path;
+    private array $controllers;
 
     public function __construct()
     {
@@ -25,14 +27,31 @@ class Router
         return [$id, $url];
     }
 
-    public function addRoute($path, array $controllers)
+    public function addRoute(string $path, array $controllers, string $nameRouteProtected)
     {
-        $this->path = $path;
-        $this->controllers = $controllers;
+        try {
+            $this->path = $path;
+            $this->controllers = $controllers;
 
-        if (!array_key_exists($path, $controllers) && !array_values($controllers)) {
-            header('Location: /api-ronycode/public/error');
+            foreach ($controllers as $key => $controller) {
+                if (array_key_exists($path, $controller)) {
+                    if ($key === $nameRouteProtected) {
+                        CheckAuth::validToken() ===
+                        false ? exit() : '';
+                    }
+                    return $controller[$path];
+                }
+            }
+        } catch (Exception) {
+            http_response_code(404);
+            echo json_encode(
+                [
+                    'data' => false,
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Rota não encontrada'
+                ]
+            );
         }
-        return $controllers[$path];
     }
 }

@@ -26,7 +26,6 @@ class User
         return $this->pass;
     }
 
-
     public function dataSerialize(): array
     {
         return get_object_vars($this);

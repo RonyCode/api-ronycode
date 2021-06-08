@@ -23,7 +23,7 @@ class AuthController implements RequestHandlerInterface
                 throw new Exception();
             }
             $user = new User(null, $email, $pass);
-            $response = RepoUser::userAuth($user);
+            $response = (new RepoUser())->userAuth($user);
             return new Response(200, [], json_encode($response));
         } catch (Exception) {
             http_response_code(404);

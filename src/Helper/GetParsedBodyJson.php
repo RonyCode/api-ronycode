@@ -2,7 +2,6 @@
 
 namespace Api\Helper;
 
-
 use Exception;
 
 class GetParsedBodyJson
@@ -15,8 +14,8 @@ class GetParsedBodyJson
     public function getParsedPost($request): array
     {
         try {
-            $request->getParsedBody() !== null ? $arrPost = $request->getParsedBody() : throw new Exception();
-            $keysPost = Key($arrPost);
+            $arrPost = $request->getParsedBody();
+            isset($arrPost) ? $keysPost = Key($arrPost) : throw new Exception();
             $keysSanitize = str_replace([',', "\"", "}", "}", "{",], ':', $keysPost);
             $convertPostToArray = array_values(array_filter(explode(':', $keysSanitize)));
             $keys = [];
@@ -35,11 +34,12 @@ class GetParsedBodyJson
             }
             return $returnPost;
         } catch (Exception) {
+            http_response_code(404);
             return [
                 'data' => false,
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'Não autenticado ou error nos verbos HTTPs'
+                'message' => 'Parâmetros inválidos ou error nos verbos HTTPs'
             ];
         }
     }

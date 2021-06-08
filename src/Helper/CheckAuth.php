@@ -16,19 +16,26 @@ class CheckAuth
                 '',
                 $httpHeader['Authorization']
             ) : $token = false;
-
-            $validJwt = json_encode(JWT::decode($token, JWTKEY, ['HS256']));
-            if (!$validJwt) {
-                throw new Exception();
-            }
+            json_encode(JWT::decode($token, JWTKEY, ['HS256']));
+           echo json_encode(
+                [
+                    'data' => true,
+                    'status' => 'error',
+                    'code' => 200,
+                    'message' => 'Token encontrado'
+                ]
+            );
+            return true;
         } catch (Exception) {
             http_response_code(404);
-            echo json_encode([
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Não autenticado, verifique o login novamente"
-            ]);
+           echo json_encode(
+                [
+                    'data' => false,
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Token inválido ou inexistente'
+                ]
+            );
             return false;
         }
     }
