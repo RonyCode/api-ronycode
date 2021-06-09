@@ -32,15 +32,19 @@ class Router
         try {
             $this->path = $path;
             $this->controllers = $controllers;
-
+            $controllerOut = [];
             foreach ($controllers as $key => $controller) {
+                $controllerOut = $controller;
                 if (array_key_exists($path, $controller)) {
-                    if ($key === $nameRouteProtected) {
-                        CheckAuth::validToken() ===
-                        false ? exit() : '';
+                    if ($key !== $nameRouteProtected) {
+                        return $controller[$path];
                     }
+                    CheckAuth::validToken() ?? '';
                     return $controller[$path];
                 }
+            }
+            if (!array_key_exists($path, $controllerOut)) {
+                throw new Exception();
             }
         } catch (Exception) {
             http_response_code(404);
@@ -50,8 +54,9 @@ class Router
                     'status' => 'error',
                     'code' => 404,
                     'message' => 'Rota não encontrada'
-                ]
+                ], JSON_UNESCAPED_UNICODE
             );
+            exit();
         }
     }
 }

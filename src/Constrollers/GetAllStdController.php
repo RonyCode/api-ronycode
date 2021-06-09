@@ -17,7 +17,7 @@ class GetAllStdController implements RequestHandlerInterface
 
         try {
             $response = (new RepoStudents())->getAllStd();
-            return new Response(200, [], json_encode($response, JSON_PRETTY_PRINT));
+            return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
             $response = [
@@ -26,7 +26,7 @@ class GetAllStdController implements RequestHandlerInterface
                 'code' => 404,
                 'message' => 'Não autenticado ou error nos verbos HTTPs'
             ];
-            return new Response(404, [], json_encode($response, JSON_PRETTY_PRINT));
+            return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         }
     }
 }

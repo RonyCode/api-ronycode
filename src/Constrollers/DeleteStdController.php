@@ -23,7 +23,7 @@ class DeleteStdController implements RequestHandlerInterface
             $student = new Student($id, null, null, null, null, null, null, null, null, null, null);
 
             $deleteStd = (new RepoStudents())->deleteStd($student);
-            return new Response(200, [], json_encode($deleteStd, JSON_PRETTY_PRINT));
+            return new Response(200, [], json_encode($deleteStd, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
             $response = [
@@ -32,7 +32,7 @@ class DeleteStdController implements RequestHandlerInterface
                 'code' => 404,
                 'message' => 'Não autenticado ou error nos verbos HTTPs'
             ];
-            return new Response(404, [], json_encode($response));
+            return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         }
     }
 }

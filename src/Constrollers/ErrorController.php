@@ -15,17 +15,16 @@ class ErrorController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        header('Content-type: text/html; charset=utf-8');
+//        header('Content-type: text/html; charset=utf-8');
 
         require __DIR__ . '/../Helper/error404.html';
-        http_response_code(404);
         http_response_code(404);
         $response = [
             'data' => false,
             'status' => 'error',
             'code' => 404,
-            'message' => 'Página não encontrada!!! Verifique usa URL'
+            'message' => 'Página não encontrada!!! Verifique sua URL'
         ];
-        return new Response(404, [], $response);
+        return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
     }
 }

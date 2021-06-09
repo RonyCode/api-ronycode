@@ -14,7 +14,8 @@ class RecoverPassController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $email = $_POST['email'];
+
+        isset($_POST['email']) ? $email = $_POST['email'] :exit();
         $user = new User(null, $email, null);
         $response = (new RepoUser())->recoverPass($user);
         return new Response(200, []);

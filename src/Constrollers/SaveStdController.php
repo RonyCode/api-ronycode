@@ -42,7 +42,7 @@ class SaveStdController implements RequestHandlerInterface
                 $result
             );
             $addUser = (new RepoStudents())->saveStd($student);
-            return new Response(200, [], json_encode($addUser));
+            return new Response(200, [], json_encode($addUser, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
             $response = [
@@ -51,7 +51,7 @@ class SaveStdController implements RequestHandlerInterface
                 'code' => 404,
                 'message' => 'Não autenticado ou error nos verbos HTTPs'
             ];
-            return new Response(404, [], $response);
+            return new Response(404, [], $response, JSON_UNESCAPED_UNICODE);
         }
     }
 }

@@ -39,11 +39,16 @@ class SelectStdController implements RequestHandlerInterface
             );
 
             $response = (new RepoStudents())->selectStd($student);
-            return new Response(200, [], json_encode($response, JSON_PRETTY_PRINT));
+            return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
-            echo 'Houve um erro de comunicação com o banco de dados, por favor verifique os metodos HTTPs';
+            http_response_code(404);
+            $response = [
+                'data' => false,
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Não autenticado ou error nos verbos HTTPs'
+            ];
+            return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-        http_response_code(404);
-        return new Response(404, [], 'error');
     }
 }

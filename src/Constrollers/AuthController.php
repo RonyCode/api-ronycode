@@ -24,7 +24,7 @@ class AuthController implements RequestHandlerInterface
             }
             $user = new User(null, $email, $pass);
             $response = (new RepoUser())->userAuth($user);
-            return new Response(200, [], json_encode($response));
+            return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
             $response = [
@@ -33,7 +33,7 @@ class AuthController implements RequestHandlerInterface
                 'code' => 404,
                 'message' => 'Não autenticado ou error nos verbos HTTPs'
             ];
-            return new Response(404, [], json_encode($response));
+            return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         }
     }
 }

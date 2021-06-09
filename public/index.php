@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 [$id, $url] = Router::normalizeUrl();
-
 $routesControllers = require __DIR__ . '/../config/routes.php';
 
 
