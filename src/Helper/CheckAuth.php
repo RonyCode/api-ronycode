@@ -26,7 +26,8 @@ class CheckAuth
                     'status' => 'error',
                     'code' => 404,
                     'message' => 'Token inválido ou inexistente'
-                ]
+                ],
+                JSON_UNESCAPED_UNICODE
             );
             exit();
         }

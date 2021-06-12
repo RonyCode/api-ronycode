@@ -18,7 +18,8 @@
     "psr/http-factory": "1.0.x-dev",
     "psr/http-message": "1.0.x-dev",
     "psr/http-server-handler": "1.0.x-dev",
-    "firebase/php-jwt": "dev-master"
+    "firebase/php-jwt": "dev-master",
+    "phpmailer/phpmailer": "dev-master"
   },
   "autoload": {
     "psr-4": {

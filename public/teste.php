@@ -36,15 +36,10 @@ date_default_timezone_set('America/Araguaina');
 
 
 $stmt = $pdo->prepare(
-    "UPDATE user SET
-                        hash = :hash, 
-                expiration_hash = :expiration_hash 
-                WHERE email = :email"
+    "DELETE FROM recovery_pass_log WHERE date_to_expires < DATE_SUB(NOW(), INTERVAL 30 MINUTE
+)"
 );
-var_dump(date('Y-m-d H:i:s'));
-$stmt->bindValue(":email", 'rony@teste');
-$stmt->bindValue(":hash", password_hash('rony@teste', PASSWORD_ARGON2I));
-$stmt->bindValue(":expiration_hash", date('Y-m-d H:i:s'));
+
 $stmt->execute();
 if ($stmt->rowCount() > 0) {
     $row = $stmt->fetch();

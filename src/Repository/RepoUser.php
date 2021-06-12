@@ -68,62 +68,36 @@ class RepoUser extends GlobalConn
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch();
-                $this->clearHashExpired($row);
-                if ($stmtHash->rowCount() > 0) {
-                    $expirationHash = $stmtHash->fetch();
-                    $stmtExp = self::conn()->prepare(
-                        'UPDATE user SET  
-                hash = NULL ,
-                expiration_hash = NULL WHERE expiration_hash= :expiration_hash'
-                    );
-                    $stmtExp->bindValue(":expiration_hash", $expirationHash['expiration_hash']);
-                    $stmtExp->execute();
-                    if ($stmtExp->rowCount() > 0) {
-                        echo 'limpei o hash vencido';
-                    }
-                    echo 'nao tem hash para limpar';
-                }
-
                 $stmtUp = self::conn()->prepare(
-                    "UPDATE user SET
-                hash = :hash, 
-                expiration_hash = :expiration_hash 
-                WHERE email = :email"
+                    "UPDATE user SET hash = :hash, 
+                expiration_hash = :expiration_hash WHERE email = :email"
                 );
-
                 $stmtUp->bindValue(":email", $user->getEmail());
                 $stmtUp->bindValue(":hash", password_hash($user->getEmail(), PASSWORD_ARGON2I));
                 $stmtUp->bindValue(":expiration_hash", date('Y-m-d H:i:s'));
                 $stmtUp->execute();
                 if ($stmt->rowCount() > 0) {
-                    $validHash = password_verify($row['email'], $row["hash"]);
-                    if (!$validHash) {
-                        throw new Exception();
-                    }
-                    echo 'passou segundo if ';
+                    return [
+                        'data' => $row['hash'],
+                        'status' => 'success',
+                        'code' => 201,
+                        "message" => "Email enviado para recuperar sua senha"
+                    ];
                 }
             }
+            throw new Exception();
         } catch (Exception) {
             http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Usuário não encontrado, verifique se o email está correto"
-            ];
+            return
+                [
+                    'data' => false,
+                    'status' => 'error',
+                    'code' => 404,
+                    "message" => "Usuário não encontrado, verifique se o email está correto"
+                ];
         }
     }
 
-    private function clearHashExpired(PDOStatement $stmt): PDOStatement
-    {
-        $stmtHash = self::conn()->prepare(
-            "SELECT * FROM user WHERE expiration_hash < now() - interval 1 day"
-        );
-        $stmtHash->execute();
-        if ($stmtHash->rowCount() > 0) {
-            return $stmtHash->fetch();
-        }
-    }
 
     public function addUser(User $user): array
     {

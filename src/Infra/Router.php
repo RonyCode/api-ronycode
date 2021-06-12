@@ -54,7 +54,8 @@ class Router
                     'status' => 'error',
                     'code' => 404,
                     'message' => 'Rota não encontrada'
-                ], JSON_UNESCAPED_UNICODE
+                ],
+                JSON_UNESCAPED_UNICODE
             );
             exit();
         }
