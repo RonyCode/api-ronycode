@@ -11,9 +11,6 @@ require '../vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 try {
-    $mail->SMTPDebug = 3;
-
-
     //Server settings
 //    $mail->SMTPDebug = 4;
     $mail->isSMTP();
@@ -22,10 +19,12 @@ try {
     $mail->Username = USER_MAIL;
     $mail->Password = PASS_MAIL;
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+    $mail->Port = PORT_MAIL;
+    $mail->setLanguage('pt-br');
+    $mail->CharSet = 'UTF-8';
 
     //Recipients
-    $mail->setFrom('espacoeducar.to@outlook.com', 'Mailer');
+    $mail->setFrom(FROM_EMAIL_MAIL, FROM_NAME_MAIL);
     $mail->addAddress('espaco.educar.palmas@gmail.com', 'RonyCode');     //Add a recipient
 //    $mail->addAddress('ellen@example.com');               //Name is optional
 //    $mail->addReplyTo('info@example.com', 'Information');
@@ -33,23 +32,11 @@ try {
 //    $mail->addBCC('bcc@example.com');
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Here is the subject';
+    $mail->Subject = SUBJET_MAIL;
     $mail->Body = BODY;
-    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+    $mail->AltBody = ALT_BODY;
 
     $mail->send();
     echo 'Message has been sent';
