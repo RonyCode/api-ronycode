@@ -2,7 +2,8 @@
 
 namespace Api\Repository;
 
-use Api\Helper\ValidateDate;
+use Api\Helper\ResponseError;
+use Api\Helper\ValidateParams;
 use Api\Infra\GlobalConn;
 use Api\Model\Student;
 use Exception;
@@ -10,8 +11,10 @@ use JetBrains\PhpStorm\Pure;
 use PDO;
 use PDOStatement;
 
-class RepoStudents extends GlobalConn implements InterfaceStudent
+class RepoStudents extends GlobalConn implements StudentInterface
 {
+    use ResponseError;
+
     public function __construct()
     {
     }
@@ -21,20 +24,13 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         try {
             $stmt = self::conn()->prepare("SELECT * FROM students");
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                $student = self::hidrateStdList($stmt);
-                return ['data' => $student, 'status' => 'success', 'code' => 200];
-            } else {
+            if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
+            $student = self::hidrateStdList($stmt);
+            return ['data' => $student, 'status' => 'success', 'code' => 200];
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Não foi possível listar todos os alunos"
-            ];
+            $this->responseCatchError("Não foi possível listar todos os alunos");
         }
     }
 
@@ -50,12 +46,12 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
 
     #[Pure] private function newObjStudent($data): Student
     {
-        $birthday = (new ValidateDate())
-            ->validateDateDb($data['birthday'], 'Y-m-d', 'd/m/Y');
-        $registrationDate = (new ValidateDate())
-            ->validateDateDb($data['registration_date'], 'Y-m-d', 'd/m/Y');
-        $expiration_date = (new ValidateDate())
-            ->validateDateDb($data['expiration_date'], 'Y-m-d', 'd/m/Y');
+        $birthday = (new ValidateParams())
+            ->dateFormatDbToBr($data['birthday']);
+        $registrationDate = (new ValidateParams())
+            ->dateFormatDbToBr($data['registration_date']);
+        $expiration_date = (new ValidateParams())
+            ->dateFormatDbToBr($data['expiration_date']);
         return new Student(
             $data['id'],
             $data['name'],
@@ -84,13 +80,7 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
                 throw new Exception();
             }
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Usuário não encontrado, ou não cadastrado"
-            ];
+            $this->responseCatchError("Usuário não encontrado, ou não cadastrado");
         }
     }
 
@@ -103,9 +93,7 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
         }
     }
 
-    private function updateStd(
-        Student $student
-    ): array
+    private function updateStd(Student $student): array
     {
         try {
             $stmt = self::conn()->prepare(
@@ -130,19 +118,12 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             $stmt->bindValue(':expiration_date', $student->getExpirationDate(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':result', $student->getResult(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return ['data' => true, 'status' => 'success', 'code' => 200];
-            } else {
+            if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
+            return ['data' => true, 'status' => 'success', 'code' => 200];
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Usuário não encontrado, ou já atualizado"
-            ];
+            $this->responseCatchError("Usuário não encontrado, ou já atualizado");
         }
     }
 
@@ -171,19 +152,12 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             $stmt->bindValue(':expiration_date', $student->getExpirationDate());
             $stmt->bindValue(':result', $student->getResult());
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return ['data' => true, 'status' => 'success', 'code' => 200, "message" => "Cadastrado com sucesso!"];
-            } else {
+            if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
+            return ['data' => true, 'status' => 'success', 'code' => 200, "message" => "Cadastrado com sucesso!"];
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente"
-            ];
+            $this->responseCatchError("Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente.");
         }
     }
 
@@ -193,19 +167,12 @@ class RepoStudents extends GlobalConn implements InterfaceStudent
             $stmt = self::conn()->prepare('DELETE FROM students WHERE id = :id');
             $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return ['data' => true, 'status' => 'success', 'code' => 200];
-            } else {
+            if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
+            return ['data' => true, 'status' => 'success', 'code' => 200];
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Usuário não encontrado, ou já deletado"
-            ];
+            $this->responseCatchError("Usuário não encontrado, ou já deletado.");
         }
     }
 }

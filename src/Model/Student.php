@@ -2,9 +2,7 @@
 
 namespace Api\Model;
 
-use Api\Helper\ValidateDate;
-use DateTime;
-use Exception;
+use Api\Helper\ValidateParams;
 
 class Student
 {
@@ -20,7 +18,8 @@ class Student
         private ?string $registrationDate,
         private ?string $expirationDate,
         private ?string $result
-    ) {
+    )
+    {
     }
 
     public function getId(): ?int
@@ -30,12 +29,12 @@ class Student
 
     public function getName(): ?string
     {
-        return $this->name;
+        return (new ValidateParams())->validateName($this->name);
     }
 
     public function getEmail(): ?string
     {
-        return $this->email;
+        return (new ValidateParams())->validateEmail($this->email);
     }
 
     public function getAddress(): ?string
@@ -45,39 +44,18 @@ class Student
 
     public function getBirthday(): ?string
     {
-        return (new ValidateDate())->validateDateDb($this->birthday, 'm/d/Y', 'Y-m-d');
+        return (new ValidateParams())->validateBirthday($this->birthday);
     }
 
     public function getPhone(): ?string
     {
-        try {
-            $regex = "/^\(?[1-9]{2}\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$/";
-            if (!preg_match($regex, $this->phone, $match)) {
-                throw new Exception();
-            }
-            return $this->phone;
-        } catch (Exception) {
-            echo "Erro, numero de Telefone inválido, use exatamente esse formato (99) 99999-9999 <br/> \n ";
-            exit();
-        }
+        return (new ValidateParams())->validatePhone($this->phone);
     }
 
     public function getAge(): ?string
     {
-        try {
-            $date = (new ValidateDate())->validateDateDb($this->birthday, 'm/d/Y', 'Y-m-d');
-            if ($date === null) {
-                throw new Exception();
-            } else {
-                $dateFormated = new DateTime($date);
-                $interval = $dateFormated->diff(new DateTime(date('Y/m/d')));
-                return $interval->format('%Y');
-            }
-        } catch (Exception) {
-            echo "Erro, não foi possível pegar a idade atual <br/> \n ";
+        return (new ValidateParams())->validateAge($this->birthday);
 
-            exit();
-        }
     }
 
     public function getReport(): ?string
@@ -92,12 +70,12 @@ class Student
 
     public function getRegistrationDate(): ?string
     {
-        return (new ValidateDate())->validateDateDb($this->registrationDate, 'm/d/Y', 'Y-m-d');
+        return (new ValidateParams())->dateFormatBrToDb($this->registrationDate);
     }
 
     public function getExpirationDate(): ?string
     {
-        return (new ValidateDate())->validateDateDb($this->expirationDate, 'm/d/Y', 'Y-m-d');
+        return (new ValidateParams())->dateFormatBrToDb($this->expirationDate);
     }
 
     public function getResult(): ?string

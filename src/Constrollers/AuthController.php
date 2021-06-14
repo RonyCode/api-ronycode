@@ -2,7 +2,7 @@
 
 namespace Api\Constrollers;
 
-use Api\Helper\GetParsedBodyJson;
+use Api\Helper\ResponseError;
 use Api\Model\User;
 use Api\Repository\RepoUser;
 use Exception;
@@ -13,27 +13,23 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuthController implements RequestHandlerInterface
 {
+    use ResponseError;
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $_POST = (new GetParsedBodyJson())->getParsedPost($request);
+
         try {
-            isset($_POST['email']) ? $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING) : $email = null;
-            isset($_POST['pass']) ? $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING) : $pass = null;
-            if (isset($_POST['email']) === null || isset($_POST['pass']) === null) {
+            if (!isset($_POST) || $_POST == false || empty($_POST)) {
                 throw new Exception();
             }
+            $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
+            $pass = filter_var($request->getParsedBody()['pass'], FILTER_SANITIZE_STRING);
             $user = new User(null, $email, $pass);
             $response = (new RepoUser())->userAuth($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
-            http_response_code(404);
-            $response = [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ];
-            return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
+            $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');
+            exit;
         }
     }
 }

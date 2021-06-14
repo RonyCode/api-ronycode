@@ -3,9 +3,11 @@
 use Api\Helper\JsonSerializer;
 use Api\Infra\GlobalConn;
 use Api\Model\Student;
+use Api\Helper\ResponseError;
+
 
 require __DIR__ . "/../src/Model/Student.php";
-require __DIR__ . "/../src/Helper/ValidateDate.php";
+require __DIR__ . "/../src/Helper/ValidateParams.php";
 require __DIR__ . "/../vendor/autoload.php";
 //closure ROTAS
 
@@ -15,13 +17,12 @@ require __DIR__ . "/../vendor/autoload.php";
 //$name = 'Rony';
 //
 //call_user_func($rotas, $name);
-
 $pdo = GlobalConn::conn();
 
 $niv = new Student(
     null,
-    'denis',
-    '(63) 98127-0951',
+    'denis@sd345%$#$==+++<pre/>',
+    '(63)981270951',
     'denis@gmail.com',
     'sobradinho 2',
     '17/02/1985',
@@ -32,16 +33,9 @@ $niv = new Student(
     null
 );
 
-date_default_timezone_set('America/Araguaina');
+//$user = new \Api\Model\User(null, 'rony@gmail.com', '17028PAR');
 
+//var_dump($user->getEmail());
+//var_dump($niv->getName());
+//var_dump($niv->getBirthday());
 
-$stmt = $pdo->prepare(
-    "DELETE FROM recovery_pass_log WHERE date_to_expires < DATE_SUB(NOW(), INTERVAL 30 MINUTE
-)"
-);
-
-$stmt->execute();
-if ($stmt->rowCount() > 0) {
-    $row = $stmt->fetch();
-    echo " mudou as infos";
-}

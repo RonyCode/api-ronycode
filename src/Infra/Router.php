@@ -2,7 +2,7 @@
 
 namespace Api\Infra;
 
-use Api\Helper\CheckAuth;
+use Api\Helper\CheckTokenAuth;
 use Exception;
 
 class Router
@@ -39,7 +39,7 @@ class Router
                     if ($key !== $nameRouteProtected) {
                         return $controller[$path];
                     }
-                    CheckAuth::validToken() ?? '';
+                    CheckTokenAuth::validToken() ?? '';
                     return $controller[$path];
                 }
             }

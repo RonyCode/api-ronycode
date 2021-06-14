@@ -4,7 +4,7 @@ namespace Api\Repository;
 
 use Api\Model\Student;
 
-interface InterfaceStudent
+interface StudentInterface
 {
     public function getALlStd(): array;
 

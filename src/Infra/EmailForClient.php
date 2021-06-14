@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Educar\Helper;
+namespace Api\Infra;
 
-use App\Educar\Controller\HtmlRenderController;
-use App\Educar\Model\Usuario;
+use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use stdClass;
 
 class EmailForClient
 {
-    private PHPMailer $mail;
-    private \stdClass $data;
-    private \Exception $error;
+    private PHPMAILER $mail;
+    private stdClass $data;
+    private Exception $error;
 
     public function __construct()
     {
@@ -19,23 +19,18 @@ class EmailForClient
         $this->mail->isSMTP();
         $this->mail->isHTML(true);
         $this->mail->setLanguage('br');
-
+        $this->mail->SMTPDebug = 4;
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->mail->SMTPAuth = true;
-
-        $this->mail->Host = MAIL['host'];
-        $this->mail->Port = MAIL['port'];
-        $this->mail->Username = MAIL['user'];
-        $this->mail->Password = MAIL['passwd'];
+        $this->mail->Host = HOST_MAIL;
+        $this->mail->Port = PORT_MAIL;
+        $this->mail->Username = USER_MAIL;
+        $this->mail->Password = PASS_MAIL;
     }
 
-    public function add(
-        string $subject,
-        string $body,
-        string $recipient_email,
-        string $recipient_name
-    ) {
+    public function add(string $subject, string $body, string $recipient_email, string $recipient_name)
+    {
         $this->data->subject = $subject;
         $this->data->body = $body;
         $this->data->recipient_email = $recipient_email;
@@ -49,10 +44,8 @@ class EmailForClient
         return $this;
     }
 
-    public function send(
-        $fromEmail = MAIL['from_email'],
-        $fromName = MAIL['from_name']
-    ): bool {
+    public function send($fromEmail = FROM_EMAIL_MAIL, $fromName = FROM_NAME_MAIL): bool
+    {
         try {
             $this->mail->Subject = $this->data->subject;
             $this->mail->msgHTML($this->data->body);

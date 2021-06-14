@@ -42,13 +42,13 @@ class SelectStdController implements RequestHandlerInterface
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
-            $response = [
+            echo json_encode([
                 'data' => false,
                 'status' => 'error',
                 'code' => 404,
                 'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ];
-            return new Response(404, [], json_encode($response, JSON_UNESCAPED_UNICODE));
+            ], JSON_UNESCAPED_UNICODE);
+            exit;
         }
     }
 }

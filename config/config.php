@@ -7,14 +7,14 @@ const DBNAME = 'projeto_db';
 const DBUSER = 'root';
 const DBPASS = '170286P@ra';
 
-///CONFIG DATA JWT
+///CONFIG LOGIN JWT
 const JWTKEY = 'Ronyc0d3';
 
 /// CONFIG PHPMAILER
 const    HOST_MAIL = 'smtp.gmail.com';
 const    PORT_MAIL = '587';
 const    USER_MAIL = 'espaco.educar.palmas@gmail.com';
-const    PASS_MAIL = 'woapqaboslwicuai';
+const    PASS_MAIL = 'eyjouwmrxvvjxllb';
 const    FROM_NAME_MAIL = 'Espaço Educar';
 const    FROM_EMAIL_MAIL = 'espaco.educar.palmas@gmail.com';
 const    SUBJET_MAIL = 'Email solicitação recuperação de senha.';

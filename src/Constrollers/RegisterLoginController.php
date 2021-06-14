@@ -2,7 +2,6 @@
 
 namespace Api\Constrollers;
 
-use Api\Helper\GetParsedBodyJson;
 use Api\Model\User;
 use Api\Repository\RepoUser;
 use Exception;
@@ -17,25 +16,24 @@ class RegisterLoginController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $_POST = (new GetParsedBodyJson())->getParsedPost($request);
         try {
-            if (!isset($_POST['data']) === false) {
+            if (!isset($_POST) || $_POST == false || empty($_POST)) {
                 throw new Exception();
             }
-            $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
-            $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING);
+            $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
+            $pass = filter_var($request->getParsedBody()['pass'], FILTER_SANITIZE_STRING);
             $user = new User(null, $email, $pass);
             $response = (new RepoUser())->addUser($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
-            $response = [
+            echo json_encode([
                 'data' => false,
                 'status' => 'error',
                 'code' => 404,
                 'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ];
-            return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
+            ], JSON_UNESCAPED_UNICODE);
+            exit;
         }
     }
 }

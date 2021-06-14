@@ -2,13 +2,16 @@
 
 namespace Api\Model;
 
+use Api\Helper\ValidateParams;
+
 class User
 {
     public function __construct(
         private ?int $id,
         private ?string $email,
         private ?string $pass,
-    ) {
+    )
+    {
     }
 
     public function getId(): ?int
@@ -18,12 +21,12 @@ class User
 
     public function getEmail(): ?string
     {
-        return $this->email;
+        return (new ValidateParams())->validateEmail($this->email);
     }
 
     public function getPass(): ?string
     {
-        return $this->pass;
+        return (new ValidateParams())->validatePass($this->pass);
     }
 
     public function dataSerialize(): array

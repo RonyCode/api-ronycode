@@ -2,15 +2,19 @@
 
 namespace Api\Repository;
 
+use Api\Helper\JwtHandler;
+use Api\Helper\ResponseError;
+use Api\Infra\EmailForClient;
 use Api\Infra\GlobalConn;
 use Api\Model\User;
 use Exception;
-use Firebase\JWT\JWT;
 use JetBrains\PhpStorm\Pure;
 use PDOStatement;
 
-class RepoUser extends GlobalConn
+class RepoUser extends GlobalConn implements UserInterface
 {
+    use ResponseError;
+
     public function __construct()
     {
     }
@@ -34,67 +38,68 @@ class RepoUser extends GlobalConn
         );
     }
 
-    public function userAuth(User $user)
+    public function userAuth(User $user): string
     {
         try {
             $stmt = self::conn()->prepare("SELECT * FROM user WHERE email = :email");
             $stmt->bindValue(":email", $user->getEmail());
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch();
-                $validHash = password_verify($user->getPass(), $row["pass"]);
-                if ($validHash) {
-                    return JWT::encode($row['email'], JWTKEY);
-                }
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
+            }
+            $row = $stmt->fetch();
+            $validHash = password_verify($user->getPass(), $row["pass"]);
+            if ($validHash) {
+                return (new JwtHandler())->jwtEncode(
+                    'localhost/api-ronycode/public/home by Ronycode',
+                    $row['email']
+                );
             }
         } catch (Exception) {
-            http_response_code(404);
-            return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                "message" => "Não autenticado, area restrita, verifique o login novamente"
-            ];
+            $this->responseCatchError("Não autenticado, area restrita, verifique o login novamente");
         }
     }
 
-    public function recoverPass(User $user)
+    public function recoverPass(User $user): array
     {
         try {
+            $stmtUp = self::conn()->prepare(
+                "UPDATE user SET hash = :hash, 
+                date_hash = :date_hash WHERE email = :email"
+            );
+            $stmtUp->bindValue(":email", $user->getEmail());
+            $stmtUp->bindValue(":hash", password_hash($user->getEmail(), PASSWORD_ARGON2I));
+            $stmtUp->bindValue(":date_hash", date('Y-m-d H:i:s'));
+            $stmtUp->execute();
+            if ($stmtUp->rowCount() <= 0) {
+                throw new Exception();
+            }
             $stmt = self::conn()->prepare(
                 "SELECT * FROM user WHERE email = :email"
             );
             $stmt->bindValue(':email', $user->getEmail());
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch();
-                $stmtUp = self::conn()->prepare(
-                    "UPDATE user SET hash = :hash, 
-                expiration_hash = :expiration_hash WHERE email = :email"
-                );
-                $stmtUp->bindValue(":email", $user->getEmail());
-                $stmtUp->bindValue(":hash", password_hash($user->getEmail(), PASSWORD_ARGON2I));
-                $stmtUp->bindValue(":expiration_hash", date('Y-m-d H:i:s'));
-                $stmtUp->execute();
-                if ($stmt->rowCount() > 0) {
-                    return [
-                        'data' => $row['hash'],
-                        'status' => 'success',
-                        'code' => 201,
-                        "message" => "Email enviado para recuperar sua senha"
-                    ];
-                }
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
             }
-            throw new Exception();
+            $row = $stmt->fetch();
+            $mail = (new EmailForClient())
+                ->add(
+                    SUBJET_MAIL,
+                    BODY,
+                    $row['email'],
+                    FROM_NAME_MAIL
+                )
+                ->send();
+            return [
+                'data' => $mail,
+                'status' => 'success',
+                'code' => 201,
+                "message" => "Email enviado para recuperar sua senha"
+            ];
+
         } catch (Exception) {
-            http_response_code(404);
-            return
-                [
-                    'data' => false,
-                    'status' => 'error',
-                    'code' => 404,
-                    "message" => "Usuário não encontrado, verifique se o email está correto"
-                ];
+            $this->responseCatchError("Usuário não encontrado, verifique se o email está correto");
         }
     }
 
@@ -108,24 +113,19 @@ class RepoUser extends GlobalConn
             $stmt->bindValue(':email', $user->getEmail());
             $stmt->bindValue(':pass', password_hash($user->getPass(), PASSWORD_ARGON2I));
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return [
-                    'data' => true,
-                    'status' => 'success',
-                    'code' => 200,
-                    "message" => 'Usuário cadastrado com sucesso!'
-                ];
-            } else {
+            if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
-        } catch (Exception) {
-            http_response_code(404);
             return [
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente.'
+                'data' => true,
+                'status' => 'success',
+                'code' => 200,
+                "message" => 'Usuário cadastrado com sucesso!'
             ];
+        } catch (Exception) {
+            $this->responseCatchError(
+                'Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente.'
+            );
         }
     }
 }

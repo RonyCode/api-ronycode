@@ -3,21 +3,24 @@
 namespace Api\Helper;
 
 use Exception;
-use Firebase\JWT\JWT;
 
-class CheckAuth
+class CheckTokenAuth
 {
     public static function validToken(): bool
     {
         try {
             $httpHeader = apache_request_headers();
-            isset($httpHeader['Authorization']) ? $token = str_replace(
+
+            isset($httpHeader['Authorization']) &&
+            str_contains($httpHeader['Authorization'], 'Bearer ') ? $token = str_replace(
                 'Bearer ',
                 '',
                 $httpHeader['Authorization']
             ) : $token = false;
-            json_encode(JWT::decode($token, JWTKEY, ['HS256']));
-            return true;
+
+            $teste = (new JwtHandler())->jwtDecode($token);
+            $teste[0] === false ? throw new Exception() : '';
+            return $teste;
         } catch (Exception) {
             http_response_code(404);
             echo json_encode(
