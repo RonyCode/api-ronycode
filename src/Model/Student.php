@@ -18,8 +18,7 @@ class Student
         private ?string $registrationDate,
         private ?string $expirationDate,
         private ?string $result
-    )
-    {
+    ) {
     }
 
     public function getId(): ?int
@@ -39,7 +38,7 @@ class Student
 
     public function getAddress(): ?string
     {
-        return $this->address;
+        return (new ValidateParams())->validateAddress($this->address);
     }
 
     public function getBirthday(): ?string
@@ -55,7 +54,6 @@ class Student
     public function getAge(): ?string
     {
         return (new ValidateParams())->validateAge($this->birthday);
-
     }
 
     public function getReport(): ?string

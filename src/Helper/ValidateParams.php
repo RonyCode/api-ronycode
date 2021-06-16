@@ -26,8 +26,9 @@ class ValidateParams
                 return $date->format('d/m/Y');
             }
         } catch (Exception) {
-            $this->responseCatchError("Os dados referente a data dever ser 
-            exatamente assim XXXX-XX-XX vindo do banco de dados.");
+            $this->responseCatchError(
+                "Os dados referente a data dever ser exatamente assim XXXX-XX-XX vindo do banco de dados."
+            );
         }
     }
 
@@ -58,25 +59,31 @@ class ValidateParams
     public function validateName(string $name): string
     {
         try {
-            if (!ctype_alpha($name)) {
+            $regex = "/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/";
+            if (!preg_match($regex, $name, $match)) {
                 throw new Exception();
             }
-            return $name;
-        } catch (Exception) {
-            $this->responseCatchError("Digite apenas letras, nome com números ou caracteres especiais não aceito.");
 
+            return mb_strtoupper($name);
+        } catch (Exception) {
+            $this->responseCatchError(
+                "Digite apenas letras no campo nome, números ou caracteres especiais não serão aceitos."
+            );
         }
     }
 
     public function validateAddress(string $address): string
     {
         try {
-            if (!ctype_alnum($address)) {
+            $regex = "/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ 0-9]+$/";
+            if (!preg_match($regex, $address, $match)) {
                 throw new Exception();
             }
-            return $address;
+            return mb_strtoupper($address);
         } catch (Exception) {
-            $this->responseCatchError("Digite apenas letras ou numeros, caracteres especiais não serão aceitos");
+            $this->responseCatchError(
+                "Digite apenas letras ou numeros no campo endereço, caracteres especiais não serão aceitos"
+            );
         }
     }
 
@@ -89,7 +96,9 @@ class ValidateParams
             }
             return $phone;
         } catch (Exception) {
-            $this->responseCatchError("Error: numero de Telefone inválido, use exatamente esse formato (99) 99999-9999.");
+            $this->responseCatchError(
+                "Error: numero de Telefone inválido, use exatamente esse formato (99) 99999-9999."
+            );
         }
     }
 

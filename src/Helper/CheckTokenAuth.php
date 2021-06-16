@@ -6,11 +6,12 @@ use Exception;
 
 class CheckTokenAuth
 {
-    public static function validToken(): bool
+    use ResponseError;
+
+    public function validToken(): string
     {
         try {
             $httpHeader = apache_request_headers();
-
             isset($httpHeader['Authorization']) &&
             str_contains($httpHeader['Authorization'], 'Bearer ') ? $token = str_replace(
                 'Bearer ',
@@ -18,21 +19,11 @@ class CheckTokenAuth
                 $httpHeader['Authorization']
             ) : $token = false;
 
-            $teste = (new JwtHandler())->jwtDecode($token);
-            $teste[0] === false ? throw new Exception() : '';
-            return $teste;
+            $response = (new JwtHandler())->jwtDecode($token);
+            $response[0] === false ? throw new Exception() : '';
+            return $response;
         } catch (Exception) {
-            http_response_code(404);
-            echo json_encode(
-                [
-                    'data' => false,
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Token inválido ou inexistente'
-                ],
-                JSON_UNESCAPED_UNICODE
-            );
-            exit();
+            $this->responseCatchError('Token inválido ou inexistente');
         }
     }
 }

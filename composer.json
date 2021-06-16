@@ -20,7 +20,8 @@
     "psr/http-server-handler": "1.0.x-dev",
     "firebase/php-jwt": "dev-master",
     "phpmailer/phpmailer": "dev-master",
-    "ext-ctype": "*"
+    "ext-ctype": "*",
+    "ext-mbstring": "*"
   },
   "autoload": {
     "psr-4": {

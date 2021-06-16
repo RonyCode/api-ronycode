@@ -4,6 +4,7 @@ namespace Api\Repository;
 
 use Api\Helper\JwtHandler;
 use Api\Helper\ResponseError;
+use Api\Helper\TemplateEmail;
 use Api\Infra\EmailForClient;
 use Api\Infra\GlobalConn;
 use Api\Model\User;
@@ -13,7 +14,7 @@ use PDOStatement;
 
 class RepoUser extends GlobalConn implements UserInterface
 {
-    use ResponseError;
+    use ResponseError, TemplateEmail;
 
     public function __construct()
     {
@@ -51,7 +52,7 @@ class RepoUser extends GlobalConn implements UserInterface
             $validHash = password_verify($user->getPass(), $row["pass"]);
             if ($validHash) {
                 return (new JwtHandler())->jwtEncode(
-                    'localhost/api-ronycode/public/home by Ronycode',
+                    'localhost/api-ronycode/public/ by Ronycode',
                     $row['email']
                 );
             }
@@ -86,7 +87,7 @@ class RepoUser extends GlobalConn implements UserInterface
             $mail = (new EmailForClient())
                 ->add(
                     SUBJET_MAIL,
-                    BODY,
+                    $this->bodyEmail($row['hash']),
                     $row['email'],
                     FROM_NAME_MAIL
                 )

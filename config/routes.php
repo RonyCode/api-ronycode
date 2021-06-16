@@ -8,6 +8,7 @@ use Api\Constrollers\ErrorController;
 use Api\Constrollers\GetAllStdController;
 use Api\Constrollers\RecoverPassController;
 use Api\Constrollers\RegisterLoginController;
+use Api\Constrollers\ResetPassController;
 use Api\Constrollers\SaveStdController;
 use Api\Constrollers\SelectStdController;
 use Api\Infra\Router;
@@ -18,6 +19,7 @@ $arrayRotas = [
         '/login' => AuthController::class,
         '/login/cadastrar' => RegisterLoginController::class,
         '/login/recuperar' => RecoverPassController::class,
+        '/login/resetar' => ResetPassController::class,
         '/error' => ErrorController::class
     ],
     $routesProtected => [

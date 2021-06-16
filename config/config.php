@@ -17,11 +17,7 @@ const    USER_MAIL = 'espaco.educar.palmas@gmail.com';
 const    PASS_MAIL = 'eyjouwmrxvvjxllb';
 const    FROM_NAME_MAIL = 'Espaço Educar';
 const    FROM_EMAIL_MAIL = 'espaco.educar.palmas@gmail.com';
-const    SUBJET_MAIL = 'Email solicitação recuperação de senha.';
+const    SUBJET_MAIL = 'Email de solicitação para recuperação de senha.';
 const    ALT_BODY = 'Email solicitação recuperação de senha.Caso o remetente não use HTML';
 
 //CONFIG BODY HTML FOR EMAIL
-const BODY = "<div>
-<p>Email para recuperar sua senha</p>
-<a href='localhost/api-ronycode/public/login/recuperar/?hash=12345'>Clique aqui </a>
-</div>";

@@ -2,15 +2,17 @@
 
 namespace Api\Infra;
 
+use Api\Helper\ResponseError;
 use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use stdClass;
 
 class EmailForClient
 {
+    use ResponseError;
+
     private PHPMAILER $mail;
     private stdClass $data;
-    private Exception $error;
 
     public function __construct()
     {
@@ -19,7 +21,7 @@ class EmailForClient
         $this->mail->isSMTP();
         $this->mail->isHTML(true);
         $this->mail->setLanguage('br');
-        $this->mail->SMTPDebug = 4;
+//        $this->mail->SMTPDebug = 4;
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->mail->SMTPAuth = true;
@@ -29,7 +31,7 @@ class EmailForClient
         $this->mail->Password = PASS_MAIL;
     }
 
-    public function add(string $subject, string $body, string $recipient_email, string $recipient_name)
+    public function add(string $subject, string $body, string $recipient_email, string $recipient_name): EmailForClient
     {
         $this->data->subject = $subject;
         $this->data->body = $body;
@@ -62,14 +64,8 @@ class EmailForClient
             }
             $this->mail->send();
             return true;
-        } catch (\Exception $e) {
-            $this->error = $e;
-            return false;
+        } catch (Exception) {
+            $this->responseCatchError('Email não enviado, por favor verifique o endereço de email');
         }
-    }
-
-    public function error(): ?\Exception
-    {
-        return $this->error;
     }
 }

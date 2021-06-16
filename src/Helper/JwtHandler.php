@@ -12,11 +12,11 @@ use UnexpectedValueException;
 
 class JwtHandler
 {
-    protected $jwt_secrect;
-    protected $token;
-    protected $issuedAt;
-    protected $expire;
-    protected $jwt;
+    protected string $jwt_secrect;
+    protected array $token;
+    protected int $issuedAt;
+    protected int $expire;
+    protected string $jwt;
 
     public function __construct()
     {
@@ -49,18 +49,14 @@ class JwtHandler
     }
 
     //DECODING THE TOKEN
-    public function jwtDecode($jwt_token)
+    public function jwtDecode($jwt_token): string|array
     {
         try {
             $decode = JWT::decode($jwt_token, $this->jwt_secrect, array('HS256'));
             return $decode->data;
         } catch (
-                ExpiredException |
-                SignatureInvalidException |
-                BeforeValidException |
-                DomainException |
-                InvalidArgumentException |
-                UnexpectedValueException $e
+        ExpiredException | SignatureInvalidException |
+        BeforeValidException | DomainException | InvalidArgumentException | UnexpectedValueException $e
         ) {
             return [false, $e->getMessage()];
         }

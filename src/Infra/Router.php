@@ -39,7 +39,7 @@ class Router
                     if ($key !== $nameRouteProtected) {
                         return $controller[$path];
                     }
-                    CheckTokenAuth::validToken() ?? '';
+                    (new CheckTokenAuth())->validToken() ?? '';
                     return $controller[$path];
                 }
             }
