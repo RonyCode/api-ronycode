@@ -17,14 +17,13 @@ class AuthController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-
         try {
             if (!isset($_POST) || $_POST == false || empty($_POST)) {
                 throw new Exception();
             }
             $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
             $pass = filter_var($request->getParsedBody()['pass'], FILTER_SANITIZE_STRING);
-            $user = new User(null, $email, $pass);
+            $user = new User(null, $email, $pass, null);
             $response = (new RepoUser())->userAuth($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {

@@ -32,7 +32,7 @@ class ValidateParams
         }
     }
 
-    public function validateEmail(string $email): string
+    public function validateEmail(null|string $email): ?string
     {
         try {
             $valitedEmail = filter_var($email, FILTER_VALIDATE_EMAIL);

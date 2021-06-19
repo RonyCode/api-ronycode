@@ -17,7 +17,7 @@ class ErrorController implements RequestHandlerInterface
     {
 //        header('Content-type: text/html; charset=utf-8');
 
-        require __DIR__ . '/../Helper/error404.html';
+        require __DIR__ . '/../Templates/error404.html';
         http_response_code(404);
         $response = [
             'data' => false,

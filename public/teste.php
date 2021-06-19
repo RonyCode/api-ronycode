@@ -34,94 +34,111 @@ $pdo = GlobalConn::conn();
 //var_dump($niv->getName());
 //var_dump($niv->getBirthday());
 
-$test = "
-            <style>
-    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@900&display=swap');
+//$test = "
+//            <style>
+//    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@900&display=swap');
+//
+//    .body_mail {
+//        max-width: 70%;
+//        max-height: 100vh;
+//        display: grid;
+//        background: url('https://i.ibb.co/rdK5Gtf/02.jpg') center / cover no-repeat;
+//       grid-template-columns: 1fr 1fr;
+//        grid-template-rows: 8rem auto auto 5rem;
+//        z-index: -1;
+//        margin: auto;
+//    }
+//
+//    .header {
+//        grid-column:  1/3;
+//        grid-row: 1/1;
+//        background: #3f271a;
+//    }
+//
+//    .nav {
+//        display: flex;
+//        justify-content: space-between;
+//        align-items: center;
+//        margin: 1rem 2rem;
+//    }
+//
+//    .nav_link {
+//        text-decoration: none;
+//        font-size: 1.5rem;
+//        color: #f1f1f1;
+//        font-family: 'Raleway Black', sans-serif;
+//    }
+//
+//    .main {
+//        grid-column:  1/3;
+//        grid-row: 2/2;
+//        background: #a71dbf;
+//        width: 100%;
+//        height: 50vh;
+//    }
+//
+//    .colum_left {
+//        background: red;
+//        grid-column:  1/1;
+//        grid-row: 3/3;
+//    }
+//
+//    .colum_right {
+//        grid-column:  2/3;
+//        grid-row: 3/3;
+//    }
+//
+//    .footer {
+//        grid-column:  1/3;
+//        grid-row: 4/4;
+//        background: #e5f8d3;
+//    }
+//
+//</style>
+//
+//<div class='body_mail'>
+//
+//  <div class='header'>
+//    <nav class='nav'>
+//      <img src='https://i.ibb.co/68nRmqb/logotipo-papagaiado.png' alt='logotipo' width='130' height='100'>
+//      <a class='nav_link' href=''>Contato</a>
+//    </nav>
+//  </div>
+//
+//  <div class='main'>
+//  </div>
+//
+//  <div class='colum_left'>
+//    <h1>coluna esquerda</h1>
+//  </div>
+//
+//  <div class='colum_right'>
+//    <h1>Descrição</h1>
+//    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+//    Culpa dolorum facilis itaque libero magni molestiae nemo nesciunt pariatur recusandae sequi!</p>
+//  </div>
+//
+//  <footer class='footer'>
+//    <p>Ronycode &copy;2021 todos os direitos reservados.</p>
+//  </footer>
+//
+//</div>
+//        ";
+//var_dump($test);
+$id = '2';
+$directory = 'imagens/' . $id;
 
-    .body_mail {
-        max-width: 70%;
-        max-height: 100vh;
-        display: grid;
-        background: url('https://i.ibb.co/rdK5Gtf/02.jpg') center / cover no-repeat;
-       grid-template-columns: 1fr 1fr;
-        grid-template-rows: 8rem auto auto 5rem;
-        z-index: -1;
-        margin: auto;
-    }
+mkdir($directory, 0777);
 
-    .header {
-        grid-column:  1/3;
-        grid-row: 1/1;
-        background: #3f271a;
-    }
+$destination_path = getcwd() . DIRECTORY_SEPARATOR . 'imagens/';
+var_dump($destination_path);
+$target_path = $destination_path . basename($_FILES["photo"]["name"]);
+var_dump($target_path);
+@move_uploaded_file($_FILES['photo']['tmp_name'], $target_path);
+//
+//var_dump($destination_path);
+//var_dump($target_path);
+//var_dump(@move_uploaded_file($_FILES['photo']['tmp_name'], $target_path));
 
-    .nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 1rem 2rem;
-    }
-
-    .nav_link {
-        text-decoration: none;
-        font-size: 1.5rem;
-        color: #f1f1f1;
-        font-family: 'Raleway Black', sans-serif;
-    }
-
-    .main {
-        grid-column:  1/3;
-        grid-row: 2/2;
-        background: #a71dbf;
-        width: 100%;
-        height: 50vh;
-    }
-
-    .colum_left {
-        background: red;
-        grid-column:  1/1;
-        grid-row: 3/3;
-    }
-
-    .colum_right {
-        grid-column:  2/3;
-        grid-row: 3/3;
-    }
-
-    .footer {
-        grid-column:  1/3;
-        grid-row: 4/4;
-        background: #e5f8d3;
-    }
-
-</style>
-
-<div class='body_mail'>
-
-  <div class='header'>
-    <nav class='nav'>
-      <img src='https://i.ibb.co/68nRmqb/logotipo-papagaiado.png' alt='logotipo' width='130' height='100'>
-      <a class='nav_link' href=''>Contato</a>
-    </nav>
-  </div>
-
-  <div class='main'>
-  </div>
-
-  <div class='colum_left'>
-    <h1>coluna esquerda</h1>
-  </div>
-
-  <div class='colum_right'>
-    <h1>Descrição</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-    Culpa dolorum facilis itaque libero magni molestiae nemo nesciunt pariatur recusandae sequi!</p>
-  </div>
-
-  <footer class='footer'>
-    <p>Ronycode &copy;2021 todos os direitos reservados.</p>
-  </footer>
-
-</div>
-        ";
-var_dump($test);
+//
+//var_dump($_FILES);

@@ -22,7 +22,7 @@ class RegisterLoginController implements RequestHandlerInterface
             }
             $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
             $pass = filter_var($request->getParsedBody()['pass'], FILTER_SANITIZE_STRING);
-            $user = new User(null, $email, $pass);
+            $user = new User(null, $email, $pass, null);
             $response = (new RepoUser())->addUser($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {

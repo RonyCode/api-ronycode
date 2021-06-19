@@ -10,6 +10,7 @@ class User
         private ?int $id,
         private ?string $email,
         private ?string $pass,
+        private ?string $hash,
     )
     {
     }
@@ -27,6 +28,11 @@ class User
     public function getPass(): ?string
     {
         return (new ValidateParams())->validatePass($this->pass);
+    }
+
+    public function getHash(): ?string
+    {
+        return $this->hash;
     }
 
     public function dataSerialize(): array

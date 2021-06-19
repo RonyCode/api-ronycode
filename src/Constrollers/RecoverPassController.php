@@ -20,7 +20,7 @@ class RecoverPassController implements RequestHandlerInterface
                 throw new Exception();
             }
             $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
-            $user = new User(null, $email, null);
+            $user = new User(null, $email, null, null);
             $response = (new RepoUser())->recoverPass($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
