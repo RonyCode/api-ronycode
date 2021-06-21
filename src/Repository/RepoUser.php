@@ -43,73 +43,22 @@ class RepoUser extends GlobalConn implements UserInterface
     public function userAuth(User $user): string
     {
         try {
-            $row = $this->selectUser($user);
-            $validHash = password_verify($user->getPass(), $row["pass"]);
-            if (!$validHash) {
-                throw new Exception();
-            }
-            return (new JwtHandler())->jwtEncode(
-                'localhost/api-ronycode/public/ by Ronycode',
-                $row['email']
-            );
-        } catch (Exception) {
-            $this->responseCatchError("Não autenticado, area restrita, verifique o login novamente");
-        }
-    }
-
-    private function selectUser(User $user): array
-    {
-        try {
-            $stmt = self::conn()->prepare(
-                "SELECT * FROM user WHERE email = :email"
-            );
-            $stmt->bindValue(':email', $user->getEmail());
-            $stmt->execute();
-            if ($stmt->rowCount() <= 0) {
-                throw new Exception();
-            }
-            return $stmt->fetch();
-        } catch (Exception) {
-            $this->responseCatchError(
-                'Usuário com este email não encontrado no banco de dados , tente novamente.'
-            );
-        }
-    }
-
-    public function checkHashEmail(User $user): array
-    {
-        try {
-            $row = $this->selectUser($user);
-            if (!password_verify($row['email'], $user->getHash())) {
-                throw new Exception();
-            }
-            return $this->resetPass($user);
-        } catch (Exception) {
-            $this->responseCatchError('hash expirada ou inválida');
-        }
-    }
-
-    private function resetPass(User $user): array
-    {
-        try {
-            $stmt = self::conn()->prepare(
-                "UPDATE user SET pass = :pass WHERE email = :email"
-            );
+            $stmt = self::conn()->prepare("SELECT * FROM user WHERE email = :email");
             $stmt->bindValue(":email", $user->getEmail());
-            $stmt->bindValue(":pass", password_hash($user->getPass(), PASSWORD_ARGON2I));
             $stmt->execute();
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
             $row = $stmt->fetch();
-            return [
-                'data' => $row,
-                'status' => 'success',
-                'code' => 201,
-                "message" => "Usuário verificado e validado!"
-            ];
+            $validHash = password_verify($user->getPass(), $row["pass"]);
+            if ($validHash) {
+                return (new JwtHandler())->jwtEncode(
+                    'localhost/api-ronycode/public/ by Ronycode',
+                    $row['email']
+                );
+            }
         } catch (Exception) {
-            $this->responseCatchError('Senha nova já usada , ou inválida');
+            $this->responseCatchError("Não autenticado, area restrita, verifique o login novamente");
         }
     }
 
@@ -127,12 +76,19 @@ class RepoUser extends GlobalConn implements UserInterface
             if ($stmtUp->rowCount() <= 0) {
                 throw new Exception();
             }
-            $row = $this->selectUser($user);
+            $stmt = self::conn()->prepare(
+                "SELECT * FROM user WHERE email = :email"
+            );
+            $stmt->bindValue(':email', $user->getEmail());
+            $stmt->execute();
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
+            }
+            $row = $stmt->fetch();
             $mail = (new EmailForClient())
                 ->add(
                     SUBJET_MAIL,
-                    $this->bodyEmail(['user' => $user->getEmail(),
-                        "hash" => $row['hash']]),
+                    $this->bodyEmail($row['hash']),
                     $row['email'],
                     FROM_NAME_MAIL
                 )
@@ -148,6 +104,7 @@ class RepoUser extends GlobalConn implements UserInterface
             $this->responseCatchError("Usuário não encontrado, verifique se o email está correto");
         }
     }
+
 
     public function addUser(User $user): array
     {
@@ -172,5 +129,10 @@ class RepoUser extends GlobalConn implements UserInterface
                 'Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente.'
             );
         }
+    }
+
+    public function checkHashEmail(User $user): array
+    {
+        // TODO: Implement checkHashEmail() method.
     }
 }

@@ -61,3 +61,4 @@ foreach ($resposta->getHeaders() as $name => $values) {
         header(sprintf('%s: %s', $name, $value), false);
     }
 }
+echo $resposta->getBody();

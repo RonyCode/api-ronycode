@@ -1,6 +1,8 @@
 <?php
 
 use Api\Infra\GlobalConn;
+use Api\Model\Image;
+use Api\Repository\RepoImages;
 
 require __DIR__ . "/../src/Model/Student.php";
 require __DIR__ . "/../vendor/autoload.php";
@@ -123,22 +125,25 @@ $pdo = GlobalConn::conn();
 //  </footer>
 //
 //</div>
-//        ";
-//var_dump($test);
-$id = '2';
-$directory = 'imagens/' . $id;
 
-mkdir($directory, 0777);
+$image = new Image($_FILES['photo']);
+$image->setPhotoId(10);
+$dir = (new RepoImages())->saveTmpImage($image);
 
-$destination_path = getcwd() . DIRECTORY_SEPARATOR . 'imagens/';
-var_dump($destination_path);
-$target_path = $destination_path . basename($_FILES["photo"]["name"]);
-var_dump($target_path);
-@move_uploaded_file($_FILES['photo']['tmp_name'], $target_path);
-//
-//var_dump($destination_path);
-//var_dump($target_path);
-//var_dump(@move_uploaded_file($_FILES['photo']['tmp_name'], $target_path));
-
-//
-//var_dump($_FILES);
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="photo" id="">
+    <button>Enviar</button>
+</form>
+</body>
+</html>

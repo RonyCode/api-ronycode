@@ -20,4 +20,6 @@ const    FROM_EMAIL_MAIL = 'espaco.educar.palmas@gmail.com';
 const    SUBJET_MAIL = 'Email de solicitação para recuperação de senha.';
 const    ALT_BODY = 'Email solicitação recuperação de senha.Caso o remetente não use HTML';
 
-//CONFIG BODY HTML FOR EMAIL
+//DIRETORY IMAGES
+
+define("DIR_IMG", $_SERVER['DOCUMENT_ROOT'] . '/api-ronycode/uploads/');
