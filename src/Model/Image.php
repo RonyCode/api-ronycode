@@ -4,54 +4,59 @@ namespace Api\Model;
 
 class Image
 {
-    private ?int $photoId;
     private ?string $photoName;
-    private ?string $photoSize;
-    private ?string $photoType;
+    private ?string $photoNameUploaded;
     private ?string $photoExtension;
     private ?string $photoTmpName;
     private ?string $photoDir;
     private ?int $photoError;
 
-    public function __construct($filesPost)
+    public function __construct(
+        private ?array $photoPost,
+        private ?string $photoId,
+        private ?int $photoCustomWidth,
+        private ?int $photoCustomHeight
+    )
     {
-        $this->photoName = pathinfo($filesPost['name'])['basename'];
-        $this->photoTmpName = $filesPost['tmp_name'];
-        $this->photoType = $filesPost['type'];
-        $this->photoExtension = pathinfo($filesPost['name'])['extension'];
+        if ($this->photoPost['error'] != 0) {
+            switch ($this->photoPost['error']) {
+                case 1:
+                    echo 'O arquivo enviado excede o limite definido na diretiva upload_max_filesize';
+                    break;
+                case 2:
+                    echo 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
+                    break;
+                case 3:
+                    echo 'O upload do arquivo foi feito parcialmente';
+                    break;
+                case 4:
+                    echo 'Nenhum arquivo foi enviado.';
+                    break;
+                case 6:
+                    echo 'Pasta temporária ausênte.';
+                    break;
+            }
+            exit();
+        }
+        $this->photoName = $this->photoPost['name'];
+        $this->photoTmpName = $this->photoPost['tmp_name'];
+        $this->photoExtension = $this->photoPost['name'];
         $this->photoDir = DIR_IMG;
-        $this->photoSize = $filesPost['size'];
-        $this->photoError = $filesPost['error'];
-    }
-
-    public function getPhotoId(): ?int
-    {
-        return $this->photoId;
-    }
-
-    public function setPhotoId(?int $photoId): void
-    {
-        $this->photoId = $photoId;
-    }
-
-    public function getPhotoName(): ?string
-    {
-        return $this->photoName;
-    }
-
-    public function getPhotoSize(): ?string
-    {
-        return $this->photoSize;
-    }
-
-    public function getPhotoType(): ?string
-    {
-        return $this->photoType;
+        $this->photoError = $this->photoPost['error'];
     }
 
     public function getPhotoExtension(): ?string
     {
-        return $this->photoExtension;
+        if (!isset(pathinfo($this->photoExtension)['extension'])) {
+            $extensao = getimagesize($this->getPhotoTmpName());
+            return image_type_to_extension($extensao[2]);
+        }
+        return '';
+    }
+
+    public function getPhotoTmpName(): ?string
+    {
+        return $this->photoTmpName;
     }
 
     public function getPhotoDir(): ?string
@@ -59,37 +64,60 @@ class Image
         return $this->photoDir;
     }
 
-    public function getPhotoError()
+    public function getPhotoId(): ?string
+    {
+        return $this->photoId;
+    }
+
+    public function setPhotoId(?string $photoId): void
+    {
+        $this->photoId = $photoId;
+    }
+
+    public function getPhotoName(): ?string
+    {
+        return $this->photoName = pathinfo($this->photoPost['name'])['basename'];
+    }
+
+    public function getPhotoError(): string|static
     {
         switch ($this->photoError) {
             case 0:
-                echo 'Arquivo enviado com sucesso!';
-                break;
+                return 'Arquivo enviado com sucesso!';
             case 1:
-                echo 'O arquivo enviado excede o limite definido na diretiva upload_max_filesize';
-                break;
+                return 'O arquivo enviado excede o limite definido na diretiva upload_max_filesize';
             case 2:
-                echo 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
-                break;
+                return 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
             case 3:
-                echo 'O upload do arquivo foi feito parcialmente';
-                break;
+                return 'O upload do arquivo foi feito parcialmente';
             case 4:
-                echo 'Nenhum arquivo foi enviado.';
-                break;
-
+                return 'Nenhum arquivo foi enviado.';
             case 6:
-                echo 'Pasta temporária ausênte.';
-                break;
+                return 'Pasta temporária ausênte.';
             case 7:
-                echo 'Falha em escrever o arquivo em disco';
-                break;
+                return 'Falha em escrever o arquivo em disco';
         }
         return $this;
     }
 
-    public function getPhotoTmpName(): ?string
+    public function getPhotoCustomHeight(): ?string
     {
-        return $this->photoTmpName;
+        return $this->photoCustomHeight;
+    }
+
+    public function getPhotoCustomWidth(): ?string
+    {
+        return $this->photoCustomWidth;
+    }
+
+    public function getPhotoNameUploaded(): ?string
+    {
+        $array = explode('/', $this->photoNameUploaded);
+        return end($array);
+    }
+
+    public function setPhotoNameUploaded(?string $photoNameUploaded): void
+    {
+        $this->photoNameUploaded = $photoNameUploaded;
     }
 }

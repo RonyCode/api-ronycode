@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a53aa00bc8e031f2468743a1bc2dc5af",
+    "content-hash": "12e44c92d222f7938242e596cbb5982d",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nyholm/psr7.git",
-                "reference": "a4a362944244ed20a6bbbecacc882abc8045585a"
+                "reference": "2dc58be5319542a437e5f61b69ebebe76d15ceca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/a4a362944244ed20a6bbbecacc882abc8045585a",
-                "reference": "a4a362944244ed20a6bbbecacc882abc8045585a",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/2dc58be5319542a437e5f61b69ebebe76d15ceca",
+                "reference": "2dc58be5319542a437e5f61b69ebebe76d15ceca",
                 "shasum": ""
             },
             "require": {
@@ -137,7 +137,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-10T20:13:32+00:00"
+            "time": "2021-06-19T07:59:27+00:00"
         },
         {
             "name": "nyholm/psr7-server",
@@ -267,12 +267,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "453159e95bab83bad683ba7835265ef8f4f4ada7"
+                "reference": "a5b5c43e50b7fba655f793ad27303cd74c57363c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/453159e95bab83bad683ba7835265ef8f4f4ada7",
-                "reference": "453159e95bab83bad683ba7835265ef8f4f4ada7",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a5b5c43e50b7fba655f793ad27303cd74c57363c",
+                "reference": "a5b5c43e50b7fba655f793ad27303cd74c57363c",
                 "shasum": ""
             },
             "require": {
@@ -328,7 +328,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/master"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.0"
             },
             "funding": [
                 {
@@ -336,7 +336,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-28T15:22:01+00:00"
+            "time": "2021-06-16T14:33:43+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -523,8 +523,10 @@
     "prefer-lowest": false,
     "platform": {
         "ext-pdo": "*",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-mbstring": "*",
+        "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
