@@ -21,7 +21,8 @@
     "firebase/php-jwt": "dev-master",
     "phpmailer/phpmailer": "dev-master",
     "ext-ctype": "*",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "ext-gd": "*"
   },
   "autoload": {
     "psr-4": {

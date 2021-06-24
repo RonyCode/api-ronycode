@@ -1,8 +1,9 @@
 <?php
 
 use Api\Infra\GlobalConn;
+use Api\Infra\UploadImages;
 use Api\Model\Image;
-use Api\Repository\RepoImages;
+
 
 require __DIR__ . "/../src/Model/Student.php";
 require __DIR__ . "/../vendor/autoload.php";
@@ -125,25 +126,31 @@ $pdo = GlobalConn::conn();
 //  </footer>
 //
 //</div>
-
-$image = new Image($_FILES['photo']);
-$image->setPhotoId(10);
-$dir = (new RepoImages())->saveTmpImage($image);
-
 ?>
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
 <body>
 <form method="post" enctype="multipart/form-data">
-    <input type="file" name="photo" id="">
-    <button>Enviar</button>
+  <input type="file" name="photo" id="">
+  <button>Enviar</button>
 </form>
 </body>
 </html>
+
+<?php
+
+$image = new Image($_FILES['photo']);
+$repo = new UploadImages();
+
+$image->setPhotoId(5);
+var_dump($image->getPhotoName());
+var_dump($image->getPhotoExtension());
+
+?>
