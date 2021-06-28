@@ -12,7 +12,7 @@ use Exception;
 use JetBrains\PhpStorm\Pure;
 use PDOStatement;
 
-class RepoUser extends GlobalConn implements UserInterface
+class RepoUsers extends GlobalConn implements UserInterface
 {
     use ResponseError;
     use TemplateEmail;
@@ -35,13 +35,14 @@ class RepoUser extends GlobalConn implements UserInterface
     {
         return new User(
             $data['id'],
+            $data['usename'],
             $data['email'],
             $data['pass'],
             $data['hash']
         );
     }
 
-    public function userAuth(User $user): string
+    public function userAuth(User $user): array
     {
         try {
             $row = $this->selectUser($user);
@@ -49,10 +50,18 @@ class RepoUser extends GlobalConn implements UserInterface
             if (!$validHash) {
                 throw new Exception();
             }
-            return (new JwtHandler())->jwtEncode(
+            $jwt = (new JwtHandler())->jwtEncode(
                 'localhost/api-ronycode/public/ by Ronycode',
-                $row['email']
+                [$row['email'], $row['id']]
             );
+            return [
+                'data' => $jwt,
+                'username' => $row['username'],
+                'email' => $row['email'],
+                'id' => $row['id'],
+                'status' => 'success',
+                'code' => 201,
+            ];
         } catch (Exception) {
             $this->responseCatchError("Não autenticado, area restrita, verifique o login novamente");
         }
@@ -144,7 +153,6 @@ class RepoUser extends GlobalConn implements UserInterface
                 'code' => 201,
                 "message" => "Email enviado para recuperar sua senha"
             ];
-
         } catch (Exception) {
             $this->responseCatchError("Usuário não encontrado, verifique se o email está correto");
         }
@@ -154,8 +162,9 @@ class RepoUser extends GlobalConn implements UserInterface
     {
         try {
             $stmt = self::conn()->prepare(
-                "INSERT INTO user (email, pass) VALUES(:email, :pass)"
+                "INSERT INTO user (username,email, pass) VALUES(:username,:email, :pass)"
             );
+            $stmt->bindValue(':username', $user->getUsername());
             $stmt->bindValue(':email', $user->getEmail());
             $stmt->bindValue(':pass', password_hash($user->getPass(), PASSWORD_ARGON2I));
             $stmt->execute();

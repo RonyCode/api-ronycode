@@ -30,7 +30,7 @@ class JwtHandler
     }
 
     // ENCODING THE TOKEN
-    public function jwtEncode($iss, $data): string
+    public function jwtEncode($iss, array $data): string
     {
         $this->token = array(
             //Adding the identifier to the token (who issue the token)

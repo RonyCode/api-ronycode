@@ -6,7 +6,7 @@ use Api\Model\User;
 
 interface UserInterface
 {
-    public function userAuth(User $user): string;
+    public function userAuth(User $user): array;
 
     public function recoverPass(User $user): array;
 

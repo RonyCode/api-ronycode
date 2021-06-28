@@ -81,7 +81,10 @@ class UploadImages
                 . $this->randomizerNames($randomNames)
                 . $this->tirarAcento($image->getPhotoName())
                 . $image->getPhotoExtension();
-            $image->setPhotoNameUploaded($nameUploaded);
+            $image->setPhotoSrc($nameUploaded);
+            $image->setPhotoNameRandomized($this->randomizerNames($randomNames)
+                . $this->tirarAcento($image->getPhotoName())
+                . $image->getPhotoExtension());
             return $nameUploaded;
         } catch (Exception) {
             $this->responseCatchError(
@@ -113,5 +116,12 @@ class UploadImages
         $com_pontuacao = array('´', '`', '¨', '^', '~', ' ', '-');
         $sem_pontuacao = array('', '', '', '', '', '_', '_');
         return str_replace($com_pontuacao, $sem_pontuacao, $final);
+    }
+
+    public function getNameImg(Image $image, $randomNames)
+    {
+        return $this->randomizerNames($randomNames)
+            . $this->tirarAcento($image->getPhotoName())
+            . $image->getPhotoExtension();
     }
 }
