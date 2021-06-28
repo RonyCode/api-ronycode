@@ -4,7 +4,6 @@ use Api\Infra\GlobalConn;
 use Api\Infra\UploadImages;
 use Api\Model\Image;
 
-
 require __DIR__ . "/../src/Model/Student.php";
 require __DIR__ . "/../vendor/autoload.php";
 //closure ROTAS
@@ -126,7 +125,14 @@ $pdo = GlobalConn::conn();
 //  </footer>
 //
 //</div>
+
+//
+$img = new Image($_FILES['photo'], 1, 300, 300);
+$uploaded = (new UploadImages())->saveImgResized($img, true);
+$imgName = $img->getPhotoSrc();
+$imgSrc = $img->getPhotoSrc();
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -137,20 +143,12 @@ $pdo = GlobalConn::conn();
   <title>Document</title>
 </head>
 <body>
+<h1>Fotos</h1>
+<img src="<?= $imgSrc ?>" alt="">
 <form method="post" enctype="multipart/form-data">
-  <input type="file" name="photo" id="">
+  <input type="file" name="photo">
   <button>Enviar</button>
 </form>
+
 </body>
 </html>
-
-<?php
-
-$image = new Image($_FILES['photo']);
-$repo = new UploadImages();
-
-$image->setPhotoId(5);
-var_dump($image->getPhotoName());
-var_dump($image->getPhotoExtension());
-
-?>

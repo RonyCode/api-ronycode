@@ -5,7 +5,8 @@ namespace Api\Model;
 class Image
 {
     private ?string $photoName;
-    private ?string $photoNameUploaded;
+    private ?string $photoNameRandomized;
+    private ?string $photoSrc;
     private ?string $photoExtension;
     private ?string $photoTmpName;
     private ?string $photoDir;
@@ -16,8 +17,7 @@ class Image
         private ?string $photoId,
         private ?int $photoCustomWidth,
         private ?int $photoCustomHeight
-    )
-    {
+    ) {
         if ($this->photoPost['error'] != 0) {
             switch ($this->photoPost['error']) {
                 case 1:
@@ -64,6 +64,7 @@ class Image
         return $this->photoDir;
     }
 
+
     public function getPhotoName(): ?string
     {
         return $this->photoName = pathinfo($this->photoPost['name'])['basename'];
@@ -100,19 +101,30 @@ class Image
         return $this->photoCustomWidth;
     }
 
-    public function getPhotoNameUploaded(): ?string
+    public function getPhotoSrc(): ?string
     {
-        $array = explode('/', $this->photoNameUploaded);
+        $array = explode('/', $this->photoSrc);
         return 'http://localhost/api-ronycode/uploads/' . $this->getPhotoId() . '/' . end($array);
     }
 
-    public function setPhotoNameUploaded(?string $photoNameUploaded): void
+    public function setPhotoSrc(?string $photoSrc): void
     {
-        $this->photoNameUploaded = $photoNameUploaded;
+        $this->photoSrc = $photoSrc;
     }
 
     public function getPhotoId(): ?string
     {
-        return 'user' . $this->photoId;
+        return 'user-' . $this->photoId;
+    }
+
+    public function getPhotoNameRandomized(): ?string
+    {
+        return $this->photoNameRandomized;
+    }
+
+    public function setPhotoNameRandomized(?string $photoNameRandomized): void
+    {
+        $array = explode('/', $this->photoSrc);
+        $this->photoNameRandomized = end($array);
     }
 }

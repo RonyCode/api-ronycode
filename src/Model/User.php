@@ -8,11 +8,11 @@ class User
 {
     public function __construct(
         private ?int $id,
+        private ?string $username,
         private ?string $email,
         private ?string $pass,
         private ?string $hash,
-    )
-    {
+    ) {
     }
 
     public function getId(): ?int
@@ -38,5 +38,10 @@ class User
     public function dataSerialize(): array
     {
         return get_object_vars($this);
+    }
+
+    public function getUsername(): ?string
+    {
+        return (new ValidateParams())->validateName($this->username);
     }
 }

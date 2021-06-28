@@ -4,7 +4,7 @@ namespace Api\Constrollers;
 
 use Api\Helper\ResponseError;
 use Api\Model\User;
-use Api\Repository\RepoUser;
+use Api\Repository\RepoUsers;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -23,8 +23,8 @@ class AuthController implements RequestHandlerInterface
             }
             $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
             $pass = filter_var($request->getParsedBody()['pass'], FILTER_SANITIZE_STRING);
-            $user = new User(null, $email, $pass, null);
-            $response = (new RepoUser())->userAuth($user);
+            $user = new User(null, null, $email, $pass, null);
+            $response = (new RepoUsers())->userAuth($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');

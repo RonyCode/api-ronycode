@@ -3,7 +3,7 @@
 namespace Api\Constrollers;
 
 use Api\Model\User;
-use Api\Repository\RepoUser;
+use Api\Repository\RepoUsers;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -20,8 +20,8 @@ class RecoverPassController implements RequestHandlerInterface
                 throw new Exception();
             }
             $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
-            $user = new User(null, $email, null, null);
-            $response = (new RepoUser())->recoverPass($user);
+            $user = new User(null, null, $email, null, null);
+            $response = (new RepoUsers())->recoverPass($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             http_response_code(404);
