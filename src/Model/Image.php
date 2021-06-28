@@ -64,16 +64,6 @@ class Image
         return $this->photoDir;
     }
 
-    public function getPhotoId(): ?string
-    {
-        return $this->photoId;
-    }
-
-    public function setPhotoId(?string $photoId): void
-    {
-        $this->photoId = $photoId;
-    }
-
     public function getPhotoName(): ?string
     {
         return $this->photoName = pathinfo($this->photoPost['name'])['basename'];
@@ -113,11 +103,16 @@ class Image
     public function getPhotoNameUploaded(): ?string
     {
         $array = explode('/', $this->photoNameUploaded);
-        return end($array);
+        return 'http://localhost/api-ronycode/uploads/' . $this->getPhotoId() . '/' . end($array);
     }
 
     public function setPhotoNameUploaded(?string $photoNameUploaded): void
     {
         $this->photoNameUploaded = $photoNameUploaded;
+    }
+
+    public function getPhotoId(): ?string
+    {
+        return 'user' . $this->photoId;
     }
 }
