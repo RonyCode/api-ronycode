@@ -3,6 +3,7 @@
 
 namespace Api\Constrollers;
 
+use Api\Helper\ResponseError;
 use Api\Infra\Router;
 use Api\Model\Student;
 use Api\Repository\RepoStudents;
@@ -13,6 +14,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SelectStdController implements RequestHandlerInterface
 {
+    use ResponseError;
+
     public function __construct()
     {
     }
@@ -41,14 +44,7 @@ class SelectStdController implements RequestHandlerInterface
             $response = (new RepoStudents())->selectStd($student);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
-            http_response_code(404);
-            echo json_encode([
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ], JSON_UNESCAPED_UNICODE);
-            exit;
+            $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');
         }
     }
 }

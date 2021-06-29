@@ -2,6 +2,7 @@
 
 namespace Api\Constrollers;
 
+use Api\Helper\ResponseError;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -9,6 +10,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ErrorController implements RequestHandlerInterface
 {
+    use ResponseError;
     public function __construct()
     {
     }

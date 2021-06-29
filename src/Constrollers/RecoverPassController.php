@@ -2,6 +2,7 @@
 
 namespace Api\Constrollers;
 
+use Api\Helper\ResponseError;
 use Api\Model\User;
 use Api\Repository\RepoUsers;
 use Exception;
@@ -12,6 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RecoverPassController implements RequestHandlerInterface
 {
+    use ResponseError;
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -24,14 +26,7 @@ class RecoverPassController implements RequestHandlerInterface
             $response = (new RepoUsers())->recoverPass($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
-            http_response_code(404);
-            echo json_encode([
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ], JSON_UNESCAPED_UNICODE);
-            exit;
+            $this->responseCatchError('Verifique o email correto ou error nos verbos HTTPs');
         }
     }
 }

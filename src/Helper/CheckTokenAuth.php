@@ -8,7 +8,7 @@ class CheckTokenAuth
 {
     use ResponseError;
 
-    public function validToken(): string
+    public function validToken(): array
     {
         try {
             $httpHeader = apache_request_headers();
@@ -18,7 +18,6 @@ class CheckTokenAuth
                 '',
                 $httpHeader['Authorization']
             ) : $token = false;
-
             $response = (new JwtHandler())->jwtDecode($token);
             $response[0] === false ? throw new Exception() : '';
             return $response;

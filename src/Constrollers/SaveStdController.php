@@ -2,6 +2,7 @@
 
 namespace Api\Constrollers;
 
+use Api\Helper\ResponseError;
 use Api\Model\Student;
 use Api\Repository\RepoStudents;
 use Exception;
@@ -12,6 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SaveStdController implements RequestHandlerInterface
 {
+    use ResponseError;
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
@@ -46,14 +49,7 @@ class SaveStdController implements RequestHandlerInterface
             $addUser = (new RepoStudents())->saveStd($student);
             return new Response(200, [], json_encode($addUser, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
-            http_response_code(404);
-            echo json_encode([
-                'data' => false,
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Não autenticado ou error nos verbos HTTPs'
-            ], JSON_UNESCAPED_UNICODE);
-            exit;
+            $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');
         }
     }
 }
