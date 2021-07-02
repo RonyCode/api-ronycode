@@ -64,7 +64,13 @@ class ValidateParams
                 throw new Exception();
             }
 
-            return mb_strtoupper($name);
+            $name = explode(' ', $name);
+            $nametrated = [];
+            foreach ($name as $nameSepared) {
+                $nametrated[] = ucfirst(mb_strtolower($nameSepared));
+            }
+            var_dump(implode(' ', $nametrated));
+            return(implode(' ', $nametrated));
         } catch (Exception) {
             $this->responseCatchError(
                 "Digite apenas letras no campo nome, números ou caracteres especiais não serão aceitos."
