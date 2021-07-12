@@ -23,8 +23,7 @@ class RepoImages extends GlobalConn implements ImageInterface
             //     Create Directory with image before insert into MYSQL AND refresh old images
             //============================================================//
             array_map('unlink', glob("/var/www/html/api-ronycode/uploads/" . $image->getPhotoId() . '/*'));
-            (new UploadImages())->saveImgResized($image, true);
-
+            $image = (new UploadImages())->saveImgResized($image, true);
             $stmt = self::conn()->prepare(
                 'INSERT INTO images_profiles 
                 (id_user, photo_name, src, size) 
@@ -41,7 +40,6 @@ class RepoImages extends GlobalConn implements ImageInterface
                 throw new Exception();
             }
             $this->refreshImg($image);
-
             return [
                 'data' => $image->getPhotoSrc(),
                 'status' => 'success',
@@ -53,7 +51,7 @@ class RepoImages extends GlobalConn implements ImageInterface
         }
     }
 
-    public function refreshImg(Image $image): array
+    private function refreshImg(Image $image): array
     {
         try {
             $stmt = self::conn()->prepare("DELETE FROM images_profiles WHERE photo_name != :photo_name");

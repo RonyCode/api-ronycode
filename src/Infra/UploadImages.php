@@ -14,7 +14,7 @@ class UploadImages
     {
     }
 
-    public function saveImgResized(Image $image, bool $randomNames)
+    public function saveImgResized(Image $image, bool $randomNames): Image
     {
 
         try {
@@ -57,12 +57,7 @@ class UploadImages
                 imagedestroy($novaimagem);
                 imagedestroy($origem);
             }
-            return [
-                'data' => $image->getPhotoError(),
-                'status' => 'success',
-                'code' => 201,
-                "message" => "Arquivo enviados <strong> " . $image->getPhotoName()
-            ];
+            return $image;
         } catch (Exception) {
             $this->responseCatchError(
                 "Arquivo com extensão inválida, verifique o tipo de extensão, para uploads somente .PNG ou .JPEG"
