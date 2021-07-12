@@ -18,14 +18,13 @@ class SavePhotoUserController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-
             empty($_FILES) ? throw new Exception() : $image =
                 ($request->withUploadedFiles($_FILES['photo']))->getUploadedFiles();
-//            isset($_GET['id']) ? $idPhoto = filter_var(
-//                $request->getQueryParams()['id'],
-//                FILTER_VALIDATE_INT
-//            ) : throw new  Exception();
-            $img = new Image($image, 10, 350, 350);
+            isset($_POST['id']) ? $idPhoto = filter_var(
+                $request->getParsedBody()['id'],
+                FILTER_VALIDATE_INT
+            ) : throw new  Exception();
+            $img = new Image($image, $idPhoto, 200, 200);
             $response = (new RepoImages())->saveImg($img);
             return new Response(200, [], str_replace('\\', '', json_encode($response)));
         } catch (Exception) {

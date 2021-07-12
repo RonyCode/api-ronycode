@@ -114,7 +114,7 @@ class Image
 
     public function getPhotoId(): ?string
     {
-        return 'user-' . $this->photoId;
+        return $this->photoId;
     }
 
     public function getPhotoNameRandomized(): ?string
