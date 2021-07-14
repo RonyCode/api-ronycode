@@ -55,10 +55,13 @@ class RepoUsers extends GlobalConn implements UserInterface
                 [$row['email'], $row['id']]
             );
             return [
-                'data' => $jwt,
-                'username' => $row['username'],
-                'email' => $row['email'],
                 'id' => $row['id'],
+                'email' => $row['email'],
+                'username' => $row['username'],
+                'token' => $jwt,
+                'photo_name' => $row['photo_name'],
+                'size' => $row['size'],
+                'src' => $row['src'],
                 'status' => 'success',
                 'code' => 201,
             ];

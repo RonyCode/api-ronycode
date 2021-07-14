@@ -14,7 +14,6 @@ class RepoImages extends GlobalConn implements ImageInterface
 
     public function __destruct()
     {
-
     }
 
     public function saveImg(Image $image): array
@@ -23,13 +22,11 @@ class RepoImages extends GlobalConn implements ImageInterface
             //     Create Directory with image before insert into MYSQL AND refresh old images
             //============================================================//
             array_map('unlink', glob("/var/www/html/api-ronycode/uploads/" . $image->getPhotoId() . '/*'));
-            $image = (new UploadImages())->saveImgResized($image, true);
+            (new UploadImages())->saveImgResized($image, true);
             $stmt = self::conn()->prepare(
-                'INSERT INTO images_profiles 
-                (id_user, photo_name, src, size) 
-                VALUES (:id_user, :photo_name, :src, :size )'
+                'UPDATE user SET photo_name = :photo_name, src = :src, size = :size WHERE id = :id'
             );
-            $stmt->bindValue(':id_user', $image->getPhotoId());
+            $stmt->bindValue(':id', $image->getPhotoId());
             $stmt->bindValue(':photo_name', $image->getPhotoNameRandomized());
             $stmt->bindValue(':src', $image->getPhotoSrc());
             $stmt->bindValue(':size', 'width_' .
@@ -39,7 +36,6 @@ class RepoImages extends GlobalConn implements ImageInterface
             if ($stmt->rowCount() < 0) {
                 throw new Exception();
             }
-            $this->refreshImg($image);
             return [
                 'data' => $image->getPhotoSrc(),
                 'status' => 'success',
@@ -48,28 +44,6 @@ class RepoImages extends GlobalConn implements ImageInterface
             ];
         } catch (Exception) {
             $this->responseCatchError('Imagens com mesmo nome não aceito.');
-        }
-    }
-
-    private function refreshImg(Image $image): array
-    {
-        try {
-            $stmt = self::conn()->prepare("DELETE FROM images_profiles WHERE photo_name != :photo_name");
-            $stmt->bindValue(':photo_name', $image->getPhotoNameRandomized());
-            $stmt->execute();
-            if ($stmt->rowCount() < 0) {
-                throw new Exception();
-            }
-
-            return [
-                'data' => true,
-                'status' => 'success',
-                'code' => 201,
-                "message" => "Imagem <strong> " . $image->getPhotoNameRandomized() . " </strong> deletada com sucesso!"
-            ];
-
-        } catch (Exception) {
-            $this->responseCatchError('Não foi possível deletar imagem.');
         }
     }
 }

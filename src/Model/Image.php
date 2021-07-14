@@ -70,6 +70,27 @@ class Image
         return $this->photoName = pathinfo($this->photoPost['name'])['basename'];
     }
 
+    public function getPhotoError(): string|static
+    {
+        switch ($this->photoError) {
+            case 0:
+                return 'Arquivo enviado com sucesso!';
+            case 1:
+                return 'O arquivo enviado excede o limite definido na diretiva upload_max_filesize';
+            case 2:
+                return 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
+            case 3:
+                return 'O upload do arquivo foi feito parcialmente';
+            case 4:
+                return 'Nenhum arquivo foi enviado.';
+            case 6:
+                return 'Pasta temporária ausênte.';
+            case 7:
+                return 'Falha em escrever o arquivo em disco';
+        }
+        return $this;
+    }
+
     public function getPhotoCustomHeight(): ?string
     {
         return $this->photoCustomHeight;
@@ -93,7 +114,7 @@ class Image
 
     public function getPhotoId(): ?string
     {
-        return  $this->photoId;
+        return $this->photoId;
     }
 
     public function getPhotoNameRandomized(): ?string
