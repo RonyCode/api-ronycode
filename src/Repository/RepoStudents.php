@@ -61,12 +61,12 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $data['email'],
             $data['address'],
             $birthday,
+            $date_expires_contract,
+            $data['contract_number'],
+            $date_payment,
             $data['grade'],
             $registration_date,
             $data['situation'],
-            $date_payment,
-            $date_expires_contract,
-            $data['contract_number'],
         );
     }
 
@@ -139,12 +139,13 @@ class RepoStudents extends GlobalConn implements StudentInterface
         try {
             $stmt = self::conn()->prepare(
                 "INSERT INTO students (
-               name, phone ,
+                      name, 
+                    phone ,
                     email , address , 
                     birthday ,
                     grade , 
                     registration_date ,
-                    situation  ,
+                    situation,
                     date_payment ,
                     date_expires_contract ,
                     contract_number )  VALUES ( 
@@ -153,7 +154,6 @@ class RepoStudents extends GlobalConn implements StudentInterface
                                 :grade, :registration_date,
                                 :situation, :date_payment,:date_expires_contract,:contract_number) "
             );
-            $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
             $stmt->bindValue(':name', $student->getName(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':phone', $student->getPhone(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':email', $student->getEmail(), PDO::PARAM_STR_CHAR);

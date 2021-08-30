@@ -41,12 +41,12 @@ class SaveStdController implements RequestHandlerInterface
                 $email,
                 $address,
                 $birthday,
+                $dateExpiresContract,
+                $contract_number,
+                $datePayment,
                 $grade,
                 $registrationDate,
-                $situation,
-                $datePayment,
-                $dateExpiresContract,
-                $contract_number
+                $situation
 
             );
             $addUser = (new RepoStudents())->saveStd($student);

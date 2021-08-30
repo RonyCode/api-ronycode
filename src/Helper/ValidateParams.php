@@ -69,7 +69,6 @@ class ValidateParams
             foreach ($name as $nameSepared) {
                 $nametrated[] = ucfirst(mb_strtolower($nameSepared));
             }
-            var_dump(implode(' ', $nametrated));
             return (implode(' ', $nametrated));
         } catch (Exception) {
             $this->responseCatchError(

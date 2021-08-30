@@ -14,7 +14,7 @@ class Student
         private ?string $address,
         private ?string $birthday,
         private ?string $dateExpiresContract,
-        private ?string $contractNumber,
+        private ?int $contractNumber,
         private ?string $datePayment,
         private ?string $grade,
         private ?string $registrationDate,
