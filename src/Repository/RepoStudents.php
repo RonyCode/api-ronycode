@@ -48,10 +48,12 @@ class RepoStudents extends GlobalConn implements StudentInterface
     {
         $birthday = (new ValidateParams())
             ->dateFormatDbToBr($data['birthday']);
-        $registrationDate = (new ValidateParams())
+        $registration_date = (new ValidateParams())
             ->dateFormatDbToBr($data['registration_date']);
-        $expiration_date = (new ValidateParams())
-            ->dateFormatDbToBr($data['expiration_date']);
+        $date_expires_contract = (new ValidateParams())
+            ->dateFormatDbToBr($data['date_expires_contract']);
+        $date_payment = (new ValidateParams())
+            ->dateFormatDbToBr($data['date_payment']);
         return new Student(
             $data['id'],
             $data['name'],
@@ -59,11 +61,12 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $data['email'],
             $data['address'],
             $birthday,
-            $data['report'],
             $data['grade'],
-            $registrationDate,
-            $expiration_date,
-            $data['result']
+            $registration_date,
+            $data['situation'],
+            $date_payment,
+            $date_expires_contract,
+            $data['contract_number'],
         );
     }
 
@@ -101,10 +104,13 @@ class RepoStudents extends GlobalConn implements StudentInterface
                     name = :name , phone = :phone, 
                     email = :email, address = :address, 
                     birthday = :birthday,
-                    report = :report, grade = :grade, 
+                    grade = :grade, 
                     registration_date = :registration_date,
-                    expiration_date = :expiration_date, 
-                    result = :result WHERE id = :id'
+                    situation  = :situation,
+                    date_payment = :date_payment,
+                    date_expires_contract = :date_expires_contract,
+                    contract_number = :contract_number
+                    WHERE id = :id'
             );
             $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
             $stmt->bindValue(':name', $student->getName(), PDO::PARAM_STR_CHAR);
@@ -112,11 +118,12 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':email', $student->getEmail(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':address', $student->getAddress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':birthday', $student->getBirthday(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':report', $student->getReport(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':grade', $student->getGrade(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':registration_date', $student->getRegistrationDate(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':expiration_date', $student->getExpirationDate(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':result', $student->getResult(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':situation', $student->getSituation(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':date_payment', $student->getDatePayment(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':date_expires_contract', $student->getDateExpiresContract(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();
@@ -132,25 +139,32 @@ class RepoStudents extends GlobalConn implements StudentInterface
         try {
             $stmt = self::conn()->prepare(
                 "INSERT INTO students (
-               name, phone, email, 
-                address, birthday,report,
-                grade, registration_date, 
-                expiration_date, result)  VALUES ( 
+               name, phone ,
+                    email , address , 
+                    birthday ,
+                    grade , 
+                    registration_date ,
+                    situation  ,
+                    date_payment ,
+                    date_expires_contract ,
+                    contract_number )  VALUES ( 
                                 :name, :phone, :email, 
-                                :address, :birthday,:report, 
+                                :address, :birthday, 
                                 :grade, :registration_date,
-                                :expiration_date, :result) "
+                                :situation, :date_payment,:date_expires_contract,:contract_number) "
             );
-            $stmt->bindValue(':name', $student->getName());
-            $stmt->bindValue(':phone', $student->getPhone());
-            $stmt->bindValue(':email', $student->getEmail());
-            $stmt->bindValue(':address', $student->getAddress());
-            $stmt->bindValue(':birthday', $student->getBirthday());
-            $stmt->bindValue(':report', $student->getReport());
-            $stmt->bindValue(':grade', $student->getGrade());
-            $stmt->bindValue(':registration_date', $student->getRegistrationDate());
-            $stmt->bindValue(':expiration_date', $student->getExpirationDate());
-            $stmt->bindValue(':result', $student->getResult());
+            $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
+            $stmt->bindValue(':name', $student->getName(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':phone', $student->getPhone(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':email', $student->getEmail(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':address', $student->getAddress(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':birthday', $student->getBirthday(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':grade', $student->getGrade(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':registration_date', $student->getRegistrationDate(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':situation', $student->getSituation(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':date_payment', $student->getDatePayment(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':date_expires_contract', $student->getDateExpiresContract(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();

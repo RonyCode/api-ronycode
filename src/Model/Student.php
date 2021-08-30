@@ -13,11 +13,12 @@ class Student
         private ?string $email,
         private ?string $address,
         private ?string $birthday,
-        private ?string $report,
+        private ?string $dateExpiresContract,
+        private ?string $contractNumber,
+        private ?string $datePayment,
         private ?string $grade,
         private ?string $registrationDate,
-        private ?string $expirationDate,
-        private ?string $result
+        private ?string $situation
     ) {
     }
 
@@ -56,9 +57,9 @@ class Student
         return (new ValidateParams())->validateAge($this->birthday);
     }
 
-    public function getReport(): ?string
+    public function getDateExpiresContract(): ?string
     {
-        return $this->report;
+        return (new ValidateParams())->dateFormatBrToDb($this->dateExpiresContract);
     }
 
     public function getGrade(): ?string
@@ -71,18 +72,25 @@ class Student
         return (new ValidateParams())->dateFormatBrToDb($this->registrationDate);
     }
 
-    public function getExpirationDate(): ?string
-    {
-        return (new ValidateParams())->dateFormatBrToDb($this->expirationDate);
-    }
 
-    public function getResult(): ?string
+    public function getSituation(): ?string
     {
-        return $this->result;
+        return $this->situation;
     }
 
     public function dataSerialize(): array
     {
         return get_object_vars($this);
     }
+
+    public function getDatePayment(): ?string
+    {
+        return (new ValidateParams())->dateFormatBrToDb($this->datePayment);
+    }
+
+    public function getContractNumber(): ?int
+    {
+        return (new ValidateParams())->validateInteger($this->contractNumber);
+    }
+
 }

@@ -5,8 +5,12 @@
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 //
-$body = "<div>
-    <p>Clique no Link Abaixo de você solicitou a troca de senhar, esse link tem validade de 24horas após este prazo é
-        preciso refazer o processo para recuperar sua senha</p>
-    <a href='localhost/api-ronycode/public/login/resetar-senha/?hash=123'></a>
-</div>";
+
+$validate = new \Api\Model\Student(null,null,null,null,null,'17/02/1986','17/02/1986',1234567,'17/02/1800',null,'11/05/2000','17/02/2021','ativo',);
+
+var_dump($validate->getAge());
+var_dump($validate->getBirthday());
+var_dump($validate->getDateExpiresContract());
+var_dump($validate->getDatePayment());
+var_dump($validate->getExpirationDate());
+var_dump($validate->getRegistrationDate());
