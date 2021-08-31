@@ -22,7 +22,7 @@ class DeleteStdController implements RequestHandlerInterface
                 throw new Exception();
             }
             $id = filter_var($request->getParsedBody()['id'], FILTER_SANITIZE_NUMBER_INT);
-            $student = new Student($id, null, null, null, null, null, null, null, null, null, null);
+            $student = new Student($id, null, null, null, null, null, null, null, null, null, null, null);
 
             $deleteStd = (new RepoStudents())->deleteStd($student);
             return new Response(200, [], json_encode($deleteStd, JSON_UNESCAPED_UNICODE));

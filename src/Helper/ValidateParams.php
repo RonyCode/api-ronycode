@@ -69,8 +69,7 @@ class ValidateParams
             foreach ($name as $nameSepared) {
                 $nametrated[] = ucfirst(mb_strtolower($nameSepared));
             }
-            var_dump(implode(' ', $nametrated));
-            return(implode(' ', $nametrated));
+            return (implode(' ', $nametrated));
         } catch (Exception) {
             $this->responseCatchError(
                 "Digite apenas letras no campo nome, números ou caracteres especiais não serão aceitos."
@@ -146,6 +145,21 @@ class ValidateParams
             return $this->dateFormatBrToDb($birthday);
         } catch (Exception) {
             $this->responseCatchError('"Os dados referente a data dever ser exatamente neste formato XX/XX/XXXX.');
+        }
+    }
+
+    public function validateInteger(int $numeral): int
+    {
+        try {
+            $regex = "/^[1-9]\d*$/";
+            if (!preg_match($regex, $numeral, $match)) {
+                throw new Exception();
+            }
+            return $numeral;
+        } catch (Exception) {
+            $this->responseCatchError(
+                "Error: Somente números serão aceito para esse formulário."
+            );
         }
     }
 }
