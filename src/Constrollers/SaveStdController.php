@@ -28,10 +28,9 @@ class SaveStdController implements RequestHandlerInterface
             $address = filter_var($_POST['address'], FILTER_SANITIZE_STRING);
             $birthday = filter_var($_POST['birthday'], FILTER_SANITIZE_STRING);
             $grade = filter_var($_POST['grade'], FILTER_SANITIZE_STRING);
-            $registrationDate = filter_var($_POST['registration_date'], FILTER_SANITIZE_STRING);
             $situation = filter_var($_POST['situation'], FILTER_SANITIZE_STRING);
             $datePayment = filter_var($_POST['date_payment'], FILTER_SANITIZE_STRING);
-            $dateExpiresContract = filter_var($_POST['date_expires_contract'], FILTER_SANITIZE_STRING);
+            $dayStudent = filter_var($_POST['day_student'], FILTER_SANITIZE_STRING);
             $contract_number = filter_var($_POST['contract_number'], FILTER_SANITIZE_STRING);
 
             $student = new Student(
@@ -41,13 +40,11 @@ class SaveStdController implements RequestHandlerInterface
                 $email,
                 $address,
                 $birthday,
-                $dateExpiresContract,
+                $dayStudent,
                 $contract_number,
                 $datePayment,
                 $grade,
-                $registrationDate,
                 $situation
-
             );
             $addUser = (new RepoStudents())->saveStd($student);
             return new Response(200, [], json_encode($addUser, JSON_UNESCAPED_UNICODE));

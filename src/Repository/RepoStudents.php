@@ -48,10 +48,6 @@ class RepoStudents extends GlobalConn implements StudentInterface
     {
         $birthday = (new ValidateParams())
             ->dateFormatDbToBr($data['birthday']);
-        $registration_date = (new ValidateParams())
-            ->dateFormatDbToBr($data['registration_date']);
-        $date_expires_contract = (new ValidateParams())
-            ->dateFormatDbToBr($data['date_expires_contract']);
         $date_payment = (new ValidateParams())
             ->dateFormatDbToBr($data['date_payment']);
         return new Student(
@@ -61,12 +57,11 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $data['email'],
             $data['address'],
             $birthday,
-            $date_expires_contract,
+            $data['day_student'],
             $data['contract_number'],
             $date_payment,
             $data['grade'],
-            $registration_date,
-            $data['situation'],
+            $data['situation']
         );
     }
 
@@ -105,10 +100,9 @@ class RepoStudents extends GlobalConn implements StudentInterface
                     email = :email, address = :address, 
                     birthday = :birthday,
                     grade = :grade, 
-                    registration_date = :registration_date,
                     situation  = :situation,
                     date_payment = :date_payment,
-                    date_expires_contract = :date_expires_contract,
+                    day_student = :day_student,
                     contract_number = :contract_number
                     WHERE id = :id'
             );
@@ -119,18 +113,14 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':address', $student->getAddress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':birthday', $student->getBirthday(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':grade', $student->getGrade(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':registration_date', $student->getRegistrationDate(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':situation', $student->getSituation(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':date_payment', $student->getDatePayment(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':date_expires_contract', $student->getDateExpiresContract(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':day_student', $student->getDayStudent(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
-            if ($stmt->rowCount() <= 0) {
-                throw new Exception();
-            }
             return ['data' => true, 'status' => 'success', 'code' => 200];
         } catch (Exception) {
-            $this->responseCatchError("Usuário não encontrado, ou já atualizado");
+            $this->responseCatchError("Usuário não encontrado, email já cadastrado ou aluno já atualizado");
         }
     }
 
@@ -144,15 +134,14 @@ class RepoStudents extends GlobalConn implements StudentInterface
                     email , address , 
                     birthday ,
                     grade , 
-                    registration_date ,
                     situation,
                     date_payment ,
-                    date_expires_contract ,
+                    day_student ,
                     contract_number )  VALUES ( 
                                 :name, :phone, :email, 
                                 :address, :birthday, 
-                                :grade, :registration_date,
-                                :situation, :date_payment,:date_expires_contract,:contract_number) "
+                                :grade,
+                                :situation, :date_payment,:day_student,:contract_number) "
             );
             $stmt->bindValue(':name', $student->getName(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':phone', $student->getPhone(), PDO::PARAM_STR_CHAR);
@@ -160,10 +149,9 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':address', $student->getAddress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':birthday', $student->getBirthday(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':grade', $student->getGrade(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':registration_date', $student->getRegistrationDate(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':situation', $student->getSituation(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':date_payment', $student->getDatePayment(), PDO::PARAM_STR_CHAR);
-            $stmt->bindValue(':date_expires_contract', $student->getDateExpiresContract(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':day_student', $student->getDayStudent(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
             if ($stmt->rowCount() <= 0) {
@@ -171,7 +159,9 @@ class RepoStudents extends GlobalConn implements StudentInterface
             }
             return ['data' => true, 'status' => 'success', 'code' => 200, "message" => "Cadastrado com sucesso!"];
         } catch (Exception) {
-            $this->responseCatchError("Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente.");
+            $this->responseCatchError(
+                "Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente."
+            );
         }
     }
 

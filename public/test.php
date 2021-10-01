@@ -30,7 +30,7 @@ var_dump("Email:" .$validate->getEmail());
 var_dump("Endereço:" .$validate->getAddress());
 var_dump("Escolaridade:" .$validate->getGrade());
 var_dump("Numero de Contrato:" .$validate->getContractNumber());
-var_dump("Venc Contrato:" .$validate->getDateExpiresContract());
+var_dump("Venc Contrato:" .$validate->getDayStudent());
 var_dump("Data Pgto:" .$validate->getDatePayment());
 var_dump("Data De matricula :" .$validate->getRegistrationDate());
 var_dump("Situação:" .$validate->getSituation());

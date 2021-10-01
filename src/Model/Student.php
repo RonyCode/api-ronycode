@@ -13,11 +13,10 @@ class Student
         private ?string $email,
         private ?string $address,
         private ?string $birthday,
-        private ?string $dateExpiresContract,
+        private ?string $dayStudent,
         private ?int $contractNumber,
         private ?string $datePayment,
         private ?string $grade,
-        private ?string $registrationDate,
         private ?string $situation
     ) {
     }
@@ -57,21 +56,15 @@ class Student
         return (new ValidateParams())->validateAge($this->birthday);
     }
 
-    public function getDateExpiresContract(): ?string
+    public function getDayStudent(): ?string
     {
-        return (new ValidateParams())->dateFormatBrToDb($this->dateExpiresContract);
+        return $this->dayStudent;
     }
 
     public function getGrade(): ?string
     {
         return $this->grade;
     }
-
-    public function getRegistrationDate(): ?string
-    {
-        return (new ValidateParams())->dateFormatBrToDb($this->registrationDate);
-    }
-
 
     public function getSituation(): ?string
     {
@@ -92,5 +85,4 @@ class Student
     {
         return (new ValidateParams())->validateInteger($this->contractNumber);
     }
-
 }
