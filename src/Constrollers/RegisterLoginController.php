@@ -21,6 +21,7 @@ class RegisterLoginController implements RequestHandlerInterface
             if (!isset($_POST) || $_POST == false || empty($_POST)) {
                 throw new Exception();
             }
+            var_dump($_POST);
             $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
             $pass = filter_var($request->getParsedBody()['pass'], FILTER_SANITIZE_STRING);
             $username = filter_var($request->getParsedBody()['name'], FILTER_SANITIZE_STRING);
@@ -29,7 +30,7 @@ class RegisterLoginController implements RequestHandlerInterface
             $response = (new RepoUsers())->addUser($user);
             return new Response(200, [], json_encode($response, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
-            $this->responseCatchError('Erro nos verbos HTTPs');
+             $this->responseCatchError('Erro nos verbos HTTPs');
         }
     }
 }

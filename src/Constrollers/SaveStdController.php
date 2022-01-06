@@ -3,11 +3,11 @@
 namespace Api\Constrollers;
 
 use Api\Helper\ResponseError;
+use Api\Model\DayStudent;
 use Api\Model\Student;
 use Api\Repository\RepoStudents;
 use Exception;
 use Nyholm\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -15,7 +15,7 @@ class SaveStdController implements RequestHandlerInterface
 {
     use ResponseError;
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): Response
     {
         try {
             if (!isset($_POST) || $_POST == false || empty($_POST)) {
@@ -46,8 +46,45 @@ class SaveStdController implements RequestHandlerInterface
                 $grade,
                 $situation
             );
-            $addUser = (new RepoStudents())->saveStd($student);
+
+
+            $dayStudent = explode(",", $dayStudent);
+            foreach ($dayStudent as $item) {
+                if (str_contains($item, "seg")) {
+                    $arrSeg[] = $item;
+                    $seg = implode(",", $arrSeg);
+                }
+                if (str_contains($item, "ter")) {
+                    $arrTer[] = $item;
+                    $ter = implode(",", $arrTer);
+                }
+                if (str_contains($item, "qua")) {
+                    $arrQua[] = $item;
+                    $qua = implode(",", $arrQua);
+                }
+                if (str_contains($item, "qui")) {
+                    $arrQui[] = $item;
+                    $qui = implode(",", $arrQui);
+                }
+                if (str_contains($item, "sex")) {
+                    $arrSex[] = $item;
+                    $sex = implode(",", $arrSex);
+                }
+            }
+            $dayStd = new DayStudent(
+                $id | null,
+                $name,
+                $seg,
+                $ter,
+                $qua,
+                $qui,
+                $sex
+            );
+            var_dump($dayStd);
+            $addUser = (new RepoStudents())->saveStd($student, $dayStd);
             return new Response(200, [], json_encode($addUser, JSON_UNESCAPED_UNICODE));
+
+
         } catch (Exception) {
             $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');
         }

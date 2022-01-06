@@ -5,9 +5,9 @@ namespace Api\Repository;
 use Api\Helper\ResponseError;
 use Api\Helper\ValidateParams;
 use Api\Infra\GlobalConn;
+use Api\Model\DayStudent;
 use Api\Model\Student;
 use Exception;
-use JetBrains\PhpStorm\Pure;
 use PDO;
 use PDOStatement;
 
@@ -17,6 +17,45 @@ class RepoStudents extends GlobalConn implements StudentInterface
 
     public function __construct()
     {
+    }
+
+    public function getAllDayStd()
+    {
+        try {
+            $stmt = self::conn()->prepare("SELECT * FROM day_student");
+            $stmt->execute();
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
+            }
+            $stdDayStd = self::hidrateDayStdList($stmt);
+            return ['data' => $stdDayStd, 'status' => 'success', 'code' => 200];
+        } catch (Exception) {
+            $this->responseCatchError("Não foi possível listar todos os dias dos alunos");
+        }
+    }
+
+    private function hidrateDayStdList(PDOStatement $stmt): array
+    {
+        $dayStudent = [];
+        $dayStdData = $stmt->fetchAll();
+        foreach ($dayStdData as $data) {
+            $dayStudent[] = self::newObjDayStudent($data)->dataDaySerialize();
+        }
+        return $dayStudent;
+    }
+
+    private function newObjDayStudent($data): DayStudent
+    {
+        return new DayStudent(
+            $data["id_student"],
+            $data["name"],
+            $data["mon"],
+            $data["tue"],
+            $data["wed"],
+            $data["thu"],
+            $data["fri"],
+        );
+
     }
 
     public function getAllStd(): array
@@ -44,7 +83,7 @@ class RepoStudents extends GlobalConn implements StudentInterface
         return $student;
     }
 
-    #[Pure] private function newObjStudent($data): Student
+    private function newObjStudent($data): Student
     {
         $birthday = (new ValidateParams())
             ->dateFormatDbToBr($data['birthday']);
@@ -82,22 +121,24 @@ class RepoStudents extends GlobalConn implements StudentInterface
         }
     }
 
-    public function saveStd(Student $student): array
+    public function saveStd(Student $student, DayStudent $dayStudent): array
     {
         if ($student->getId()) {
-            return self::updateStd($student);
+            return self::updateStd($student, $dayStudent);
         } else {
-            return self::addStd($student);
+            return self::addStd($student, $dayStudent);
         }
     }
 
-    private function updateStd(Student $student): array
+    private function updateStd(Student $student, DayStudent $dayStudent): array
     {
         try {
             $stmt = self::conn()->prepare(
                 'UPDATE students SET 
-                    name = :name , phone = :phone, 
-                    email = :email, address = :address, 
+                    name = :name ,
+                    phone = :phone, 
+                    email = :email, 
+                    address = :address, 
                     birthday = :birthday,
                     grade = :grade, 
                     situation  = :situation,
@@ -118,18 +159,58 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':day_student', $student->getDayStudent(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
+            }
+            self::updDayStudent($dayStudent);
             return ['data' => true, 'status' => 'success', 'code' => 200];
         } catch (Exception) {
             $this->responseCatchError("Usuário não encontrado, email já cadastrado ou aluno já atualizado");
         }
     }
 
-    private function addStd(Student $student): array
+    private function updDayStudent(DayStudent $dayStudent): array
     {
         try {
             $stmt = self::conn()->prepare(
-                "INSERT INTO students (
-                      name, 
+                'UPDATE day_student SET  
+                    name = :name,
+                    mon = :mon ,
+                    tue = :tue ,
+                    wed = :wed, 
+                    thu = :thu,
+                    fri = :fri  WHERE id_student = :id_student'
+            );
+
+            $stmt->bindValue(':id_student', $dayStudent->getIdStudent(), PDO::PARAM_INT);
+            $stmt->bindValue(':name', $dayStudent->getName(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':mon', $dayStudent->getMon(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':tue', $dayStudent->getTue(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':wed', $dayStudent->getWed(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':thu', $dayStudent->getThu(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':fri', $dayStudent->getFri(), PDO::PARAM_STR_CHAR);
+            $stmt->execute();
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
+            }
+            return [
+                'data' => true,
+                'status' => 'success',
+                'code' => 200, "message" => "Dia do aluno cadastrado com sucesso!"
+            ];
+        } catch (Exception) {
+            $this->responseCatchError(
+                "Não foi possível atualizar dia do aluno, tente novamente."
+            );
+        }
+    }
+
+    private function addStd(Student $student, DayStudent $dayStudent): array
+    {
+        try {
+            $stmt = self::conn()->prepare(
+                "INSERT INTO students (  
+                    name, 
                     phone ,
                     email , address , 
                     birthday ,
@@ -157,10 +238,49 @@ class RepoStudents extends GlobalConn implements StudentInterface
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
+            self::addDayStd($dayStudent);
             return ['data' => true, 'status' => 'success', 'code' => 200, "message" => "Cadastrado com sucesso!"];
         } catch (Exception) {
             $this->responseCatchError(
                 "Usuário já cadastrado ou não pode ser cadastrado com este email, tente novamente."
+            );
+        }
+    }
+
+    private function addDayStd(DayStudent $dayStudent): array
+    {
+        try {
+            $stmt = self::conn()->prepare(
+                "INSERT INTO day_student (  
+                    id_student,
+                    name,mon ,
+                    tue , wed , 
+                    thu ,fri 
+                    )  VALUES ( :id_student,
+                                :name, :mon, 
+                                :tue, :wed, 
+                                :thu,:fri
+                                ) "
+            );
+            $stmt->bindValue(':id_student', $dayStudent->getIdStudent(), PDO::PARAM_INT);
+            $stmt->bindValue(':name', $dayStudent->getName(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':mon', $dayStudent->getMon(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':tue', $dayStudent->getTue(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':wed', $dayStudent->getWed(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':thu', $dayStudent->getThu(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':fri', $dayStudent->getFri(), PDO::PARAM_STR_CHAR);
+            $stmt->execute();
+            if ($stmt->rowCount() <= 0) {
+                throw new Exception();
+            }
+            return [
+                'data' => true,
+                'status' => 'success', 'code' => 200,
+                "message" => "Dia do aluno cadastrado com sucesso!"
+            ];
+        } catch (Exception) {
+            $this->responseCatchError(
+                "Não foi possível cadastra dia do aluno, tente novamente."
             );
         }
     }
