@@ -24,14 +24,19 @@ $validate = new Student(
 );
 
 var_dump("Nome:" . $validate->getName());
-var_dump("idade:" .$validate->getAge());
-var_dump("Data nasc:" .$validate->getBirthday());
-var_dump("Email:" .$validate->getEmail());
-var_dump("Endereço:" .$validate->getAddress());
-var_dump("Escolaridade:" .$validate->getGrade());
-var_dump("Numero de Contrato:" .$validate->getContractNumber());
-var_dump("Venc Contrato:" .$validate->getDayStudent());
-var_dump("Data Pgto:" .$validate->getDatePayment());
-var_dump("Data De matricula :" .$validate->getRegistrationDate());
-var_dump("Situação:" .$validate->getSituation());
+//var_dump("idade:" . $validate->getAge());
+//var_dump("Data nasc:" . $validate->getBirthday());
+//var_dump("Email:" . $validate->getEmail());
+//var_dump("Endereço:" . $validate->getAddress());
+//var_dump("Escolaridade:" . $validate->getGrade());
+//var_dump("Numero de Contrato:" . $validate->getContractNumber());
+//var_dump("Venc Contrato:" . $validate->getDayStudent());
+//var_dump("Data Pgto:" . $validate->getDatePayment());
+//var_dump("Situação:" . $validate->getSituation());
 
+$test = password_hash("1234567a", PASSWORD_ARGON2I);
+$test2 = password_verify("1234567a", $test);
+var_dump($test, $test2);
+echo $test2;
+echo $test;
+echo password_hash('password', PASSWORD_ARGON2I);

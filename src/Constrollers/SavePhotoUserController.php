@@ -24,7 +24,7 @@ class SavePhotoUserController implements RequestHandlerInterface
                 $request->getParsedBody()['id'],
                 FILTER_VALIDATE_INT
             ) : throw new  Exception();
-            $img = new Image($image, $idPhoto, 200, 200);
+            $img = new Image($image, $idPhoto, 220, 220);
             $response = (new RepoImages())->saveImg($img);
             return new Response(200, [], str_replace('\\', '', json_encode($response)));
         } catch (Exception) {
