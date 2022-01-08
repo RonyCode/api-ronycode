@@ -6,7 +6,6 @@ use Api\Constrollers\AuthController;
 use Api\Constrollers\DeleteStdController;
 use Api\Constrollers\ErrorController;
 use Api\Constrollers\GetAllStdController;
-use Api\Constrollers\GetDayStdController;
 use Api\Constrollers\GetUserController;
 use Api\Constrollers\RecoverPassController;
 use Api\Constrollers\RegisterLoginController;
@@ -27,7 +26,6 @@ $arrayRotas = [
     ],
     $routesProtected => [
         '/aluno' => GetAllStdController::class,
-        '/aluno/grade' => GetDayStdController::class,
         '/aluno/id/' . $id => SelectStdController::class,
         '/aluno/salvar' => SaveStdController::class,
         '/aluno/deletar' => DeleteStdController::class,

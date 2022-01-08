@@ -2,7 +2,6 @@
 
 namespace Api\Repository;
 
-use Api\Model\DayStudent;
 use Api\Model\Student;
 
 interface StudentInterface
@@ -13,7 +12,5 @@ interface StudentInterface
 
     public function deleteStd(Student $student): array;
 
-    public function saveStd(Student $student, DayStudent $dayStudent): array;
-
-
+    public function saveStd(Student $student): array;
 }

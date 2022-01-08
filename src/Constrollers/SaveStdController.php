@@ -80,11 +80,8 @@ class SaveStdController implements RequestHandlerInterface
                 $qui,
                 $sex
             );
-            var_dump($dayStd);
             $addUser = (new RepoStudents())->saveStd($student, $dayStd);
             return new Response(200, [], json_encode($addUser, JSON_UNESCAPED_UNICODE));
-
-
         } catch (Exception) {
             $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');
         }
