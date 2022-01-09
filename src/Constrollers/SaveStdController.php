@@ -47,40 +47,7 @@ class SaveStdController implements RequestHandlerInterface
                 $situation
             );
 
-
-            $dayStudent = explode(",", $dayStudent);
-            foreach ($dayStudent as $item) {
-                if (str_contains($item, "seg")) {
-                    $arrSeg[] = $item;
-                    $seg = implode(",", $arrSeg);
-                }
-                if (str_contains($item, "ter")) {
-                    $arrTer[] = $item;
-                    $ter = implode(",", $arrTer);
-                }
-                if (str_contains($item, "qua")) {
-                    $arrQua[] = $item;
-                    $qua = implode(",", $arrQua);
-                }
-                if (str_contains($item, "qui")) {
-                    $arrQui[] = $item;
-                    $qui = implode(",", $arrQui);
-                }
-                if (str_contains($item, "sex")) {
-                    $arrSex[] = $item;
-                    $sex = implode(",", $arrSex);
-                }
-            }
-            $dayStd = new DayStudent(
-                $id | null,
-                $name,
-                $seg,
-                $ter,
-                $qua,
-                $qui,
-                $sex
-            );
-            $addUser = (new RepoStudents())->saveStd($student, $dayStd);
+            $addUser = (new RepoStudents())->saveStd($student);
             return new Response(200, [], json_encode($addUser, JSON_UNESCAPED_UNICODE));
         } catch (Exception) {
             $this->responseCatchError('Não autenticado ou error nos verbos HTTPs');
