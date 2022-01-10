@@ -17,7 +17,11 @@ class Student
         private ?int $contractNumber,
         private ?string $datePayment,
         private ?string $grade,
-        private ?string $situation
+        private ?string $progress,
+        private ?string $situation,
+        private ?string $report,
+        private ?string $responsible,
+        private ?string $responsiblePhone
     ) {
     }
 
@@ -65,6 +69,10 @@ class Student
     {
         return $this->grade;
     }
+    public function getProgress(): ?string
+    {
+        return $this->progress;
+    }
 
     public function getSituation(): ?string
     {
@@ -84,5 +92,20 @@ class Student
     public function getContractNumber(): ?int
     {
         return (new ValidateParams())->validateInteger($this->contractNumber);
+    }
+
+    public function getReport(): ?string
+    {
+        return $this->report;
+    }
+
+    public function getResponsible(): ?string
+    {
+        return $this->responsible;
+    }
+
+    public function getResponsiblePhone(): ?string
+    {
+        return (new ValidateParams())->validatePhone($this->responsiblePhone);
     }
 }

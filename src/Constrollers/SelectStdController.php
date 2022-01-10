@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Api\Constrollers;
 
 use Api\Helper\ResponseError;
@@ -39,6 +38,10 @@ class SelectStdController implements RequestHandlerInterface
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                null
             );
 
             $response = (new RepoStudents())->selectStd($student);

@@ -5,7 +5,6 @@ namespace Api\Repository;
 use Api\Helper\ResponseError;
 use Api\Helper\ValidateParams;
 use Api\Infra\GlobalConn;
-use Api\Model\DayStudent;
 use Api\Model\Student;
 use Exception;
 use PDO;
@@ -61,7 +60,12 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $data['contract_number'],
             $date_payment,
             $data['grade'],
-            $data['situation']
+            $data['progress'],
+            $data['situation'],
+            $data['report'],
+            $data['responsible'],
+            $data['responsible_phone'],
+
         );
     }
 
@@ -102,10 +106,14 @@ class RepoStudents extends GlobalConn implements StudentInterface
                     address = :address, 
                     birthday = :birthday,
                     grade = :grade, 
+                    progress = :progress, 
                     situation  = :situation,
                     date_payment = :date_payment,
                     day_student = :day_student,
-                    contract_number = :contract_number
+                    contract_number = :contract_number,
+                    report = :report,
+                    responsible = :responsible,
+                    responsible_phone = :responsible_phone
                     WHERE id = :id'
             );
             $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
@@ -115,10 +123,14 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':address', $student->getAddress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':birthday', $student->getBirthday(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':grade', $student->getGrade(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':progress', $student->getProgress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':situation', $student->getSituation(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':date_payment', $student->getDatePayment(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':day_student', $student->getDayStudent(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':report', $student->getReport(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':responsible', $student->getResponsible(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':responsible_phone', $student->getResponsiblePhone(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();
@@ -136,17 +148,24 @@ class RepoStudents extends GlobalConn implements StudentInterface
                 "INSERT INTO students (  
                     name, 
                     phone ,
-                    email , address , 
+                    email , 
+                    address , 
                     birthday ,
                     grade , 
+                    progress,
                     situation,
                     date_payment ,
                     day_student ,
-                    contract_number )  VALUES ( 
+                    contract_number,
+                    report,
+                    responsible ,
+                    responsible_phone )  VALUES ( 
                                 :name, :phone, :email, 
                                 :address, :birthday, 
-                                :grade,
-                                :situation, :date_payment,:day_student,:contract_number) "
+                                :grade,:progress,
+                                :situation, :date_payment,
+                                :day_student,:contract_number,:report,
+                                :responsible,:responsible_phone) "
             );
             $stmt->bindValue(':name', $student->getName(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':phone', $student->getPhone(), PDO::PARAM_STR_CHAR);
@@ -154,10 +173,14 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':address', $student->getAddress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':birthday', $student->getBirthday(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':grade', $student->getGrade(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':progress', $student->getProgress(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':situation', $student->getSituation(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':date_payment', $student->getDatePayment(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':day_student', $student->getDayStudent(), PDO::PARAM_STR_CHAR);
             $stmt->bindValue(':contract_number', $student->getContractNumber(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':report', $student->getReport(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':responsible', $student->getResponsible(), PDO::PARAM_STR_CHAR);
+            $stmt->bindValue(':responsible_phone', $student->getResponsiblePhone(), PDO::PARAM_STR_CHAR);
             $stmt->execute();
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();
