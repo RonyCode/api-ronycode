@@ -21,12 +21,11 @@ class RepoStudents extends GlobalConn implements StudentInterface
     public function getAllStd(): array
     {
         try {
-            $stmt = self::conn()->prepare("SELECT * FROM students");
-            $stmt->execute();
+            $stmt = self::conn()->query("SELECT * FROM students");
             if ($stmt->rowCount() <= 0) {
                 throw new Exception();
             }
-            $student = self::hidrateStdList($stmt);
+            $student = $this->hidrateStdList($stmt);
             return ['data' => $student, 'status' => 'success', 'code' => 200];
         } catch (Exception) {
             $this->responseCatchError("Não foi possível listar todos os alunos");
@@ -38,7 +37,7 @@ class RepoStudents extends GlobalConn implements StudentInterface
         $student = [];
         $stdData = $stmt->fetchAll();
         foreach ($stdData as $data) {
-            $student[] = self::newObjStudent($data)->dataSerialize();
+            $student[] = $this->newObjStudent($data)->dataSerialize();
         }
         return $student;
     }
@@ -76,7 +75,7 @@ class RepoStudents extends GlobalConn implements StudentInterface
             $stmt->bindValue(':id', $student->getId(), PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
-                $student = self::hidrateStdList($stmt);
+                $student = $this->hidrateStdList($stmt);
                 return ['data' => $student, 'status' => 'success', 'code' => 200];
             } else {
                 throw new Exception();
@@ -89,9 +88,9 @@ class RepoStudents extends GlobalConn implements StudentInterface
     public function saveStd(Student $student): array
     {
         if ($student->getId()) {
-            return self::updateStd($student);
+            return $this->updateStd($student);
         } else {
-            return self::addStd($student);
+            return $this->addStd($student);
         }
     }
 

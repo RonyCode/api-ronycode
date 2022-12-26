@@ -1,11 +1,11 @@
 <?php
 
 //CONFIG OF DATABASE
-const DBDRIVE = 'mysql';
+const DBDRIVE = 'https://definitive-saddle.000webhostapp.com/';
 const DBHOST = 'localhost';
-const DBNAME = 'projeto_db';
-const DBUSER = 'root';
-const DBPASS = '170286P@ra';
+const DBNAME = 'id19891291_espaco_educar_db';
+const DBUSER = 'id19891291_ronycode';
+const DBPASS = '17021986P@ra';
 
 ///CONFIG LOGIN JWT
 const JWTKEY = 'Ronyc0d3';
